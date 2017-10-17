@@ -16,7 +16,24 @@ public class DBWrapper {
 
     public static void createQuiz(Quiz quiz) {
         Connection conn = null;
-        String PS = "INSERT INTO quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
+        PreparedStatement preparedStatement = null;
+        String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+    }
+
+    public static void deleteQuiz(Quiz quiz) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "DELETE FROM fmldb.quiz WHERE fmldb.quiz.id = " + quiz.getQuizID();
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
             conn.prepareStatement(PS);
@@ -24,6 +41,7 @@ public class DBWrapper {
             e.printStackTrace();
         } finally {
             close(conn);
+            close(preparedStatement);
         }
     }
 
