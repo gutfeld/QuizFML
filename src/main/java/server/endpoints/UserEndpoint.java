@@ -2,6 +2,7 @@ package server.endpoints;
 
 import com.google.gson.Gson;
 import server.DBWrapper;
+import server.Controllers.UserController;
 import server.models.User;
 
 import javax.ws.rs.*;
@@ -11,11 +12,15 @@ import java.util.ArrayList;
 
 @Path("/User")
 public class UserEndpoint {
+    UserController uController = new UserController();
 
     @GET
     public Response get() {
         return Response.status(200).entity("User").build();
     }
+        ArrayList<User> users = uController.getUsers();
+
+        return Response.status(200).entity(new Gson().toJson(users)).build();
 
     @Path("/login/{username}/{password}")
     @POST

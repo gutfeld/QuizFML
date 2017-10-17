@@ -1,25 +1,21 @@
-package main.java.server.models;
+package server.models;
 
 public class Question {
- {
-
-
-
-    }
 
     private int quizID;
     private int questionId;
     private String questionTitle;
 
 
-    public Question (int quizId, int questionId, String questionTitle) {
+    public Question(int quizId, String questionTitle, int questionId) {
 
         this.quizID = quizId;
-        this.questionId = questionId;
         this.questionTitle = questionTitle;
+        this.questionId = questionId;
 
     }
-    public Question (){
+
+    public Question() {
 
     }
 
@@ -41,16 +37,10 @@ public class Question {
 
     public String getQuestionTitle() {
         return questionTitle;
-      }
+    }
 
     public void setQuestionTitle(String questionTitle) {
         this.questionTitle = questionTitle;
     }
 
-
-
-
-
-
-
-    }
+}
