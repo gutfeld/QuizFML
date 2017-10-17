@@ -13,8 +13,8 @@ public class DBWrapper {
 /*Når i arbejder lokalt, så lav to streger foran DEFAULT_URL og fjerne de to fra den neden under.
 * Derefter skal man erstarte DEFAULT_USERNAME til jeres lokale database navn og DEFAULT_PASSWORD til jeres lokale
 * pass.*/
-    public static final String DEFAULT_URL = "distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com";
-    //public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fmldb";
+    //public static final String DEFAULT_URL = "distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com";
+    public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fmldb";
     private static final String DEFAULT_USERNAME = "dis2017";
     private static final String DEFAULT_PASSWORD = "doekdis2017";
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
