@@ -17,11 +17,13 @@ public class User {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+
     }
 
     public User() {
 
     }
+
 
     public int getId() {
         return id;
