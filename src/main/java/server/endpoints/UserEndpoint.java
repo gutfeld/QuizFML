@@ -1,6 +1,7 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
+import server.Controllers.UserController;
 import server.models.User;
 
 import javax.ws.rs.*;
@@ -13,14 +14,17 @@ import java.util.ArrayList;
 
 public class UserEndpoint {
 
+    UserController controller = new UserController();
+
+
     @GET
     public Response getUsers() {
 
-    // ArrayList<User> users; Mangler DB her som skal give UserTable
+        ArrayList<User> users = controller.getUsers();
 
         return Response.status(200)
                 .type("application/json")
-                .entity(new Gson().toJson("users"))
+                .entity(new Gson().toJson(users))
                 .build();
 
     }
@@ -29,7 +33,8 @@ public class UserEndpoint {
     @Path("{id}")
 
     public Response getUserById(@PathParam("id") int UserId) {
-    // User foundUser;
+
+        // User foundUser
 
         return Response
             .status(200)
@@ -41,9 +46,12 @@ public class UserEndpoint {
 @POST
     public Response createUser(String jsonUser) {
 
-        User newUser = new Gson().fromJson(jsonUser, User.class);
+        try {
+            controller.createUser(new Gson().fromJson(jsonUser, User.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        // .addNewUserToDb metode skal bruges her
 
         return Response
                 .status(200)
@@ -52,5 +60,21 @@ public class UserEndpoint {
                 .build();
     }
 
+
+    @POST
+        public Response createAdmin(String jsonAdmin) {
+
+        try {
+            controller.createUser(new Gson().fromJson(jsonAdmin, User.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return Response
+                .status(200)
+                .type("application/json")
+                .entity("{\"adminCreated\":\"true\"}")
+                .build();
+    }
 
 }

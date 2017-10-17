@@ -9,49 +9,61 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserController {
+    ArrayList<User> users;
     Gson gson;
     DBWrapper db = new DBWrapper();
 
     public UserController() {
         this.gson = gson;
     }
-public static void main(String []args) {
-    UserController uController = new UserController();
-    uController.getUsers();
-}
 
     public ArrayList<User> getUsers() {
 
         ArrayList<User> users = db.getUsers();
-        for(int i = 0; i<users.size(); i++) System.out.println(users.get(i));
+        for (int i = 0; i < users.size(); i++) System.out.println(users.get(i));
         return users;
     }
 
-    //public User getUser (int userId){
+    public void createUser(User createUser) throws Exception {
 
-        //User user = db.getUsers(userId);
+        /* String hashedPassword = Digester.hashWIthSalt(u.getPassword()); Her kan der hashes og tilføjes salt til password
+        u.setPassword(hashedPassword);
+        */
 
-    //}
+        db.createUser(createUser);
 
-    //public boolean deleteUser(int id) throws SQLException {
+    }
 
-       // DBWrapper db = new DBWrapper();
+    public void createAdmin(User createAdmin) throws Exception {
 
-        //boolean deleteUser = db.deleteUser(id);
+        db.createAdmin(createAdmin);
+    }
 
+    /*public User findById(int id) {
 
-
-        //return deleteUser;
-
-   // }
-
-
-
-
-
-
-
-
+        ArrayList<User> users;
+        for (User user; this.users) {
+            if (user.getUserId() == id) {
+                return user;
+            }
+        }
+        return null;
+    } */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
