@@ -43,7 +43,7 @@ public class UserEndpoint {
 
         User newUser = new Gson().fromJson(jsonUser, User.class);
 
-        // Tilføj den nye user til UserArrayet her
+        // .addNewUserToDb metode skal bruges her
 
         return Response
                 .status(200)
@@ -51,4 +51,6 @@ public class UserEndpoint {
                 .entity("{\"userCreated\":\"true\"}")
                 .build();
     }
+
+
 }
