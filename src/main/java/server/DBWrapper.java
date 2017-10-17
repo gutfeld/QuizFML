@@ -21,8 +21,8 @@ public class DBWrapper {
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
             ps = conn.prepareStatement("INSERT INTO quiz (quizTitle, course_id) VALUES ('?',?)");
-            ps.setString(1,quizTitle);
-            ps.setInt(2,course_id);
+            ps.setString(1,quiz.getQuizTitle());
+            ps.setInt(2,quiz.getCourseID());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
