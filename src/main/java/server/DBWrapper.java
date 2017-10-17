@@ -174,7 +174,7 @@ public class DBWrapper {
     }
 */
 
-    public static ArrayList getUsers() {
+    public static ArrayList<User> getUsers() {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -186,7 +186,7 @@ public class DBWrapper {
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                User user = new User(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),rs.getString(6));
+                User user = new User(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4), rs.getString(5),rs.getInt(6));
                 allUsers.add(user);
             }
         } catch (SQLException e) {
@@ -199,7 +199,7 @@ public class DBWrapper {
         return allUsers;
     }
 
-    public static ArrayList getCourses() {
+    public static ArrayList<Course> getCourses() {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -223,7 +223,7 @@ public class DBWrapper {
         return allCourses;
     }
 
-    public static ArrayList getQuizzes(Course course) {
+    public static ArrayList<Quiz> getQuizzes(Course course) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -247,7 +247,7 @@ public class DBWrapper {
         return allQuizzes;
     }
 
-    public static ArrayList getQuestions(Quiz quiz) {
+    public static ArrayList<Question> getQuestions(Quiz quiz) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -272,7 +272,7 @@ public class DBWrapper {
     }
 
 
-    public static ArrayList getChoices(Question question) {
+    public static ArrayList<Choice> getChoices(Question question) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
