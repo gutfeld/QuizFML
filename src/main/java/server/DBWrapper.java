@@ -13,40 +13,53 @@ public class DBWrapper {
 /*Når i arbejder lokalt, så lav to streger foran DEFAULT_URL og fjerne de to fra den neden under.
 * Derefter skal man erstarte DEFAULT_USERNAME til jeres lokale database navn og DEFAULT_PASSWORD til jeres lokale
 * pass.*/
-    //public static final String DEFAULT_URL = "distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com";
-    public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fmldb";
+    public static final String DEFAULT_URL = "jdbc:mysql://distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com:3306/fmldb";
+   // public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fmldb";
     private static final String DEFAULT_USERNAME = "dis2017";
     private static final String DEFAULT_PASSWORD = "doekdis2017";
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     public static Connection getConnection(String url, String username, String password) throws SQLException {
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver").newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return DriverManager.getConnection(url, username, password);
     }
 
     public static User authorizeUser (String username, String password) throws Exception {
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
         Connection connection = getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-        ResultSet resultSet;
         User userFound = null;
 
         try {
-            PreparedStatement authenticate = connection.prepareStatement("select * from fmldb/users where username = ? AND Password = ?");
+            PreparedStatement authenticate = connection.prepareStatement("select * from user where username = ? AND password = ?");
             authenticate.setString(1, username);
             authenticate.setString(2, password);
 
-            resultSet = authenticate.executeQuery();
+            ResultSet resultSet = authenticate.executeQuery();
 
             while (resultSet.next()) {
                 try {
-                    userFound = new User();
-                    userFound.setId(resultSet.getInt("UserID"));
+                    userFound = new User(
+                            resultSet.getInt("id"),
+                            resultSet.getString("firstName"),
+                            resultSet.getString("lastName"),
+                            resultSet.getString("userName"),
+                            resultSet.getString("password"),
+                            resultSet.getInt("type")
+                    );
 
                 } catch (SQLException e) {
-
+                    e.printStackTrace();
                 }
             }
         } catch (Exception e) {
@@ -217,7 +230,7 @@ public class DBWrapper {
                 User user = new User(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4), rs.getString(5),rs.getInt(6));
                 allUsers.add(user);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             close(conn);

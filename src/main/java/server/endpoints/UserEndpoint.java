@@ -20,20 +20,18 @@ public class UserEndpoint {
     }
         ArrayList<User> users = uController.getUsers();
 
-        return Response.status(200).entity(new Gson().toJson(users)).build();
+        //return Response.status(200).entity(new Gson().toJson(users)).build();
 
-    @Path("/login/{username}/{password}")
+    @Path("/login")
     @POST
-    public Response authorizeUser(@PathParam("username") String username, @PathParam("password") String password) throws Exception {
-        System.out.printf("IS login hit?");
-        User user = DBWrapper.authorizeUser(username, password);
-        System.out.println("test1");
-        System.out.println("userID: "+ user.getId());
-        if (user != null) {
-            return Response.status(200).entity("SUCESS!").build();
+    public Response authorizeUser(String data) throws Exception {
+        User u = uController.login(data);
+        if (u.getUsername() != null) {
+            return Response.status(200).entity(new Gson().toJson(u)).build();
         } else {
-            return Response.status(400).entity("Failure :-(").build();
+            return Response.status(400).entity("failure!").build();
         }
+
     }
 
 
