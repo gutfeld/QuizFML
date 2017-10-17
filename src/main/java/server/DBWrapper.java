@@ -295,12 +295,12 @@ public class DBWrapper {
         }
         return allChoices;
     }
-/*
+
     // Giver alle de fag som en bestemt bruger er tilmeldt
-    public static ArrayList getUsersCourses (User user, Course course) {
+    public static ArrayList getUsersCourses (User user) {
         Connection conn = null;
         ResultSet rs = null;
-        String PS = null;
+        String PS = "SELECT c.* FROM fmldb.user_course uc INNER JOIN fmldb.user u ON u.id = uc.user_id INNER JOIN fmldb.course c ON uc.course_id = c.id WHERE u.id =" + user.getId() ;
         PreparedStatement preparedStatement = null;
         ArrayList<Course> courseArrayList = new ArrayList<>();
         try {
@@ -320,18 +320,35 @@ public class DBWrapper {
             close(preparedStatement);
         }
         return courseArrayList;
-
     }
-*/
-/*
+
+
     // Giver alle brugere som er tilmeldt et bestemt fag
-    public static ArrayList getCoursesUsers () {
+    public static ArrayList getCoursesUsers (Course course) {
         Connection conn = null;
         ResultSet rs = null;
+        String PS = "SELECT u.* FROM fmldb.user_course uc INNER JOIN fmldb.course c ON uc.course_id = c.id INNER JOIN fmldb.user u ON uc.user_id = u.id WHERE c.id =" + course.getCourseID();
         PreparedStatement preparedStatement = null;
+        ArrayList<User> userArrayList = new ArrayList<>();
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement(PS);
+            rs = preparedStatement.executeQuery();
 
+            while (rs.next()) {
+                User tempUser = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6));
+                userArrayList.add(tempUser);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(rs);
+            close(preparedStatement);
+        }
+        return userArrayList;
     }
-*/
+
     public static void close(Connection connection) {
         try {
             if (connection != null) {
