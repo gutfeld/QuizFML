@@ -297,7 +297,7 @@ public class DBWrapper {
     }
 
     // Giver alle de fag som en bestemt bruger er tilmeldt
-    public static ArrayList getUsersCourses (User user) {
+    public static ArrayList<Course> getUsersCourses (User user) {
         Connection conn = null;
         ResultSet rs = null;
         String PS = "SELECT c.* FROM fmldb.user_course uc INNER JOIN fmldb.user u ON u.id = uc.user_id INNER JOIN fmldb.course c ON uc.course_id = c.id WHERE u.id =" + user.getId() ;
@@ -324,7 +324,7 @@ public class DBWrapper {
 
 
     // Giver alle brugere som er tilmeldt et bestemt fag
-    public static ArrayList getCoursesUsers (Course course) {
+    public static ArrayList<User> getCoursesUsers (Course course) {
         Connection conn = null;
         ResultSet rs = null;
         String PS = "SELECT u.* FROM fmldb.user_course uc INNER JOIN fmldb.course c ON uc.course_id = c.id INNER JOIN fmldb.user u ON uc.user_id = u.id WHERE c.id =" + course.getCourseID();
