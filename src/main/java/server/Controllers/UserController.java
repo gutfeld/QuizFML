@@ -21,7 +21,6 @@ public static void main(String []args) {
 }
 
     public ArrayList<User> getUsers() {
-
         ArrayList<User> users = db.getUsers();
         for(int i = 0; i<users.size(); i++) System.out.println(users.get(i));
         return users;
