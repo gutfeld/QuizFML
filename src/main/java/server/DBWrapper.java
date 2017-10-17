@@ -1,6 +1,7 @@
 package server;
 
 import server.models.Quiz;
+import server.models.User;
 
 import java.sql.*;
 
@@ -18,6 +19,39 @@ public class DBWrapper {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+    }
+
+    public static void createUser(User createuser) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createuser.getFirstName() + ", " + createuser.getLastName() + ", " + createuser.getUsername() + ", " + createuser.getPassword() + ",1)";
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+    }
+
+
+    public static void createAdmin(User createadmin) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createadmin.getFirstName() + ", " + createadmin.getLastName() + ", " + createadmin.getUsername() + ", " + createadmin.getPassword() + ",2)";
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
             preparedStatement = conn.prepareStatement(PS);
