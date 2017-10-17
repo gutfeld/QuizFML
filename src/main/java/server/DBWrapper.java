@@ -16,43 +16,43 @@ public class DBWrapper {
         return DriverManager.getConnection(url, username, password);
     }
 
+    public static void createUser(User createUser) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createUser.getFirstName() + ", " + createUser.getLastName() + ", " + createUser.getUsername() + ", " + createUser.getPassword() + ",1)";
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+    }
+
+
+    public static void createAdmin(User createAdmin) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createAdmin.getFirstName() + ", " + createAdmin.getLastName() + ", " + createAdmin.getUsername() + ", " + createAdmin.getPassword() + ",2)";
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+    }
+
     public static void createQuiz(Quiz quiz) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
-        try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement(PS);
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close(conn);
-            close(preparedStatement);
-        }
-    }
-
-    public static void createUser(User createuser) {
-        Connection conn = null;
-        PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createuser.getFirstName() + ", " + createuser.getLastName() + ", " + createuser.getUsername() + ", " + createuser.getPassword() + ",1)";
-        try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement(PS);
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close(conn);
-            close(preparedStatement);
-        }
-    }
-
-
-    public static void createAdmin(User createadmin) {
-        Connection conn = null;
-        PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createadmin.getFirstName() + ", " + createadmin.getLastName() + ", " + createadmin.getUsername() + ", " + createadmin.getPassword() + ",2)";
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
             preparedStatement = conn.prepareStatement(PS);
@@ -86,7 +86,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         ArrayList<User> allUsers = new ArrayList<>();
         try {
-
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
             preparedStatement = conn.prepareStatement("SELECT * FROM fmldb.user");
             rs = preparedStatement.executeQuery();
 
