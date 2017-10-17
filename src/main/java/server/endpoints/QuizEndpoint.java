@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class QuizEndpoint {
     String demoJson = new Gson().toJson("test");
     @GET
-    public Response getUsers(){
+    public Response getQuizs(){
 
         //ArrayList<Quiz> quizs;
 
