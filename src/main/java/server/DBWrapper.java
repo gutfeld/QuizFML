@@ -14,20 +14,15 @@ public class DBWrapper {
         return DriverManager.getConnection(url, username, password);
     }
 
-    public static Quiz createQuiz(Quiz quiz) {
+    public static void createQuiz(Quiz quiz) {
         Connection conn = null;
-        ResultSet rs = null;
-        PreparedStatement ps = null;
+        String PS = "INSERT INTO quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            ps = conn.prepareStatement("INSERT INTO quiz (quizTitle, course_id) VALUES ('?',?)");
-            ps.setString(1,quiz.getQuizTitle());
-            ps.setInt(2,quiz.getCourseID());
+            conn.prepareStatement(PS);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            close(rs);
-            close(ps);
             close(conn);
         }
     }
