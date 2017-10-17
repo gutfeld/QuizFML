@@ -364,7 +364,7 @@ public class DBWrapper {
     }
 
 
-    // Giver alle brugere som er tilmeldt et bestemt fag
+    // Giver alle brugere som er tilmeldt et bestemt fag s
     public static ArrayList<User> getCoursesUsers (Course course) {
         Connection conn = null;
         ResultSet rs = null;
