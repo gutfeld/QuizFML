@@ -1,9 +1,8 @@
 package server;
 
-import server.models.Quiz;
-import server.models.User;
 
 import java.sql.*;
+import server.models.*;
 import java.util.ArrayList;
 
 public class DBWrapper {
@@ -102,6 +101,103 @@ public class DBWrapper {
             close(preparedStatement);
         }
         return allUsers;
+    }
+
+    public static ArrayList getCourses() {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        ArrayList<Course> allCourses = new ArrayList<>();
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement("SELECT * FROM fmldb.course");
+            rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Course course = new Course(rs.getInt(1), rs.getString(2));
+                allCourses.add(course);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(rs);
+            close(preparedStatement);
+        }
+        return allCourses;
+    }
+
+    public static ArrayList getQuizzes(Course course) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        ArrayList<Quiz> allQuizzes = new ArrayList<>();
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.quiz q INNER JOIN fmldb.course c ON q.course_id = c.id WHERE q.course_id =" + course.getCourseID() + ";");
+            rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Quiz quiz = new Quiz(rs.getInt(1),rs.getString(2),rs.getInt(3));
+                allQuizzes.add(quiz);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(rs);
+            close(preparedStatement);
+        }
+        return allQuizzes;
+    }
+
+    public static ArrayList getQuestions(Quiz quiz) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        ArrayList<Question> allQuestions = new ArrayList<>();
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.question q INNER JOIN fmldb.quiz qz ON q.quiz_id = qz.id WHERE q.quiz_id = " + quiz.getQuizID() + ";");
+            rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Question question = new Question(rs.getInt(1),rs.getString(2),rs.getInt(3));
+                allQuestions.add(question);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(rs);
+            close(preparedStatement);
+        }
+        return allQuestions;
+    }
+
+
+    public static ArrayList getChoices(Question question) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        ArrayList<Choice> allChoices = new ArrayList<>();
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + question.getQuestionId() + ";");
+            rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Choice choice = new Choice(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getBoolean(4));
+                allChoices.add(choice);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(rs);
+            close(preparedStatement);
+        }
+        return allChoices;
     }
 
 
