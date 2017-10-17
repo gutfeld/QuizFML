@@ -3,7 +3,7 @@ package server.models;
 
 public class User {
 
-    private int id;
+    private int UserId;
     private String username;
     private String password;
     private int type;
@@ -11,9 +11,9 @@ public class User {
     private String lastName;
 
 
-    public User(int id, String username, String password, int type, String firstName, String lastName) {
+    public User(int UserId, String username, String password, int type, String firstName, String lastName) {
 
-        this.id = id;
+        this.UserId = UserId;
         this.username = username;
         this.password = password;
         this.type = type;
@@ -27,12 +27,12 @@ public class User {
     }
 
 
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return UserId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int id) {
+        this.UserId = id;
     }
 
     public String getUsername() {

@@ -14,9 +14,41 @@ import java.util.ArrayList;
 public class UserEndpoint {
 
     @GET
-    public Response get() {
-        return Response.status(200).entity("User").build();
+    public Response getUsers() {
+
+    // ArrayList<User> users; Mangler DB her som skal give UserTable
+
+        return Response.status(200)
+                .type("application/json")
+                .entity(new Gson().toJson("users"))
+                .build();
 
     }
 
+    @GET
+    @Path("{id}")
+
+    public Response getUserById(@PathParam("id") int UserId) {
+    // User foundUser;
+
+        return Response
+            .status(200)
+            .type("application/json")
+            .entity(new Gson().toJson("foundUser"))
+            .build();
+    }
+
+@POST
+    public Response createUser(String jsonUser) {
+
+        User newUser = new Gson().fromJson(jsonUser, User.class);
+
+        // Tilføj den nye user til UserArrayet her
+
+        return Response
+                .status(200)
+                .type("application/json")
+                .entity("{\"userCreated\":\"true\"}")
+                .build();
+    }
 }
