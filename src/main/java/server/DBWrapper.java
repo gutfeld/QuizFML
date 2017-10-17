@@ -1,8 +1,10 @@
 package server;
 
 import server.models.Quiz;
+import server.models.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DBWrapper {
 
@@ -44,6 +46,31 @@ public class DBWrapper {
             close(preparedStatement);
         }
     }
+
+    public static ArrayList getUsers() {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        ArrayList<User> allUsers = new ArrayList<>();
+        try {
+
+            preparedStatement = conn.prepareStatement("SELECT * FROM fmldb.user");
+            rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                User user = new User(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),rs.getString(6));
+                allUsers.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(rs);
+            close(preparedStatement);
+        }
+        return allUsers;
+    }
+
 
     public static void close(Connection connection) {
         try {
