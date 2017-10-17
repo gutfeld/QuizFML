@@ -14,7 +14,11 @@ public class Quiz {
     }
 
     // tom constructor
-    public Quiz() {}
+
+    public Quiz() {
+
+    }
+
 
     //get metoder
     public int getQuizID(){
@@ -42,3 +46,5 @@ public class Quiz {
         this.courseID=courseID;
     }
 }
+
+
