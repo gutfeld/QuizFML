@@ -1,5 +1,6 @@
 package server;
 
+import com.google.gson.Gson;
 import server.models.Quiz;
 import server.models.User;
 
@@ -15,6 +16,34 @@ public class DBWrapper {
     public static Connection getConnection(String url, String username, String password) throws SQLException {
         return DriverManager.getConnection(url, username, password);
     }
+
+    public static User authorizeUser (String username, String password) throws Exception {
+        Connection connection = getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+        ResultSet resultSet;
+        User userFound = null;
+
+        try {
+            PreparedStatement authenticate = connection.prepareStatement("select * from fmldb/users where username = ? AND Password = ?");
+            authenticate.setString(1, username);
+            authenticate.setString(2, password);
+
+            resultSet = authenticate.executeQuery();
+
+            while (resultSet.next()) {
+                try {
+                    userFound = new User();
+                    userFound.setId(resultSet.getInt("UserID"));
+
+                } catch (SQLException e) {
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userFound;
+    }
+
 
     public static void createUser(User createUser) {
         Connection conn = null;
