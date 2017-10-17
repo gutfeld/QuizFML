@@ -84,6 +84,7 @@ public class DBWrapper {
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
             conn.prepareStatement(PS);
+            preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -92,7 +93,88 @@ public class DBWrapper {
         }
     }
 
-    public static ArrayList<User> getUsers() {
+    public static void createQuestion(Question question) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "INSERT INTO fmldb.question (questionTitle, quiz_id) VALUES (" + question.getQuestionTitle() + ", " + question.getQuizID() + ")";
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+    }
+
+    public static void deleteQuestion(Question question) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "DELETE FROM fmldb.question WHERE fmldb.question.id = " + question.getQuestionId();
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn.prepareStatement(PS);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+    }
+
+    public static void createChoice(Choice choice) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (" + choice.getChoiceTitle() + ", " + choice.isAnswer() + ", " + choice.getQuestionId() + ")";
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+    }
+
+    public static void deleteChoice(Choice choice) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "DELETE FROM fmldb.choice WHERE fmldb.choice.id = " + choice.getChoiceId();
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn.prepareStatement(PS);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+    }
+/*  // VALIDERING KAN SKE I CONTROLLER, BRUG getChoices OG TJEK HVILKEN SOM HAR ANSWER = TRUE
+    public static Boolean validateChoice(Choice choice) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "";
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL,DEFAULT_USERNAME,DEFAULT_PASSWORD);
+            conn.prepareStatement(PS);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+    }
+*/
+
+    public static ArrayList getUsers() {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -104,11 +186,10 @@ public class DBWrapper {
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                User user = new User(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4), rs.getString(5),rs.getInt(6));
-                System.out.println("user:" + user.getFirstName());
+                User user = new User(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),rs.getString(6));
                 allUsers.add(user);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             close(conn);
@@ -214,8 +295,43 @@ public class DBWrapper {
         }
         return allChoices;
     }
+/*
+    // Giver alle de fag som en bestemt bruger er tilmeldt
+    public static ArrayList getUsersCourses (User user, Course course) {
+        Connection conn = null;
+        ResultSet rs = null;
+        String PS = null;
+        PreparedStatement preparedStatement = null;
+        ArrayList<Course> courseArrayList = new ArrayList<>();
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement(PS);
+            rs = preparedStatement.executeQuery();
 
+            while (rs.next()) {
+                Course tempCourse = new Course(rs.getInt(1), rs.getString(2));
+                courseArrayList.add(tempCourse);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(rs);
+            close(preparedStatement);
+        }
+        return courseArrayList;
 
+    }
+*/
+/*
+    // Giver alle brugere som er tilmeldt et bestemt fag
+    public static ArrayList getCoursesUsers () {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+
+    }
+*/
     public static void close(Connection connection) {
         try {
             if (connection != null) {
