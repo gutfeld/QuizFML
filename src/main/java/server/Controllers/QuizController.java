@@ -1,4 +1,4 @@
 package server.Controllers;
 
-public class QuizController {
+public class AdminController {
 }
