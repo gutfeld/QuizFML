@@ -7,14 +7,14 @@ public class Quiz {
     int courseID;
 
     // constructor
-    public Quiz(int quizID, String quizTitle, int courseID){
+    public quiz (int quizID, String quizTitle, int courseID){
         this.quizID = quizID;
         this.quizTitle = quizTitle;
         this.courseID = courseID;
     }
 
     // tom constructor
-    public Quiz() {}
+    public quiz() {}
 
     //get metoder
     public int getQuizID(){
