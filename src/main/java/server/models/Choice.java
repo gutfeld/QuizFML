@@ -13,7 +13,7 @@ public class Choice {
         this.choiceId = choiceId;
         this.choiceTitle = choiceTitle;
         this.answer = answer;
-
+//
     }
 
     public int getQuestionId() {
