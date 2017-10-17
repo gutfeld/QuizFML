@@ -7,6 +7,7 @@ public class Choice {
     private boolean answer;
 
 
+    //
     public Choice( int questionId, int choiceId, String choiceTitle, boolean answer){
         this.questionId = questionId;
         this.choiceId = choiceId;
