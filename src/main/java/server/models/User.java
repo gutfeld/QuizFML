@@ -10,7 +10,7 @@ public class User {
     private int type;
 
 
-    public User(String username, String password, int StudentNumber)
+    public User(String username, String password, int StudentNumber  h)
 
 
 
