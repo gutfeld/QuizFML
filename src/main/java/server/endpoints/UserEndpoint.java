@@ -8,8 +8,15 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
 
+@Path("/User")
+
+
 public class UserEndpoint {
 
+    @GET
+    public Response get() {
+        return Response.status(200).entity("User").build();
 
+    }
 
 }

@@ -1,4 +1,56 @@
-package server.models;
+package main.java.server.models;
 
 public class Question {
-}
+ {
+
+
+
+    }
+
+    private int quizID;
+    private int questionId;
+    private String questionTitle;
+
+
+    public Question (int quizId, int questionId, String questionTitle) {
+
+        this.quizID = quizId;
+        this.questionId = questionId;
+        this.questionTitle = questionTitle;
+
+    }
+    public Question (){
+
+    }
+
+    public int getQuizID() {
+        return quizID;
+    }
+
+    public void setQuizID(int quizID) {
+        this.quizID = quizID;
+    }
+
+    public int getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
+    }
+
+    public String getQuestionTitle() {
+        return questionTitle;
+      }
+
+    public void setQuestionTitle(String questionTitle) {
+        this.questionTitle = questionTitle;
+    }
+
+
+
+
+
+
+
+    }
