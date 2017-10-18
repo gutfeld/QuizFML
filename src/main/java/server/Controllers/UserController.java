@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserController {
+
     ArrayList<User> users;
     Gson gson;
     DBWrapper db = new DBWrapper();
