@@ -105,7 +105,6 @@ public class DBWrapper {
     public static void createQuiz(Quiz quiz) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        //String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
             preparedStatement = conn.prepareStatement("INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (?,?)");
@@ -265,7 +264,7 @@ public class DBWrapper {
         return allCourses;
     }
 
-    public static ArrayList<Quiz> getQuizzes(Course course) {
+   /* public static ArrayList<Quiz> getQuizzes(int courseId) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -288,7 +287,7 @@ public class DBWrapper {
         }
         return allQuizzes;
     }
-
+*/
     public static ArrayList<Question> getQuestions(Quiz quiz) {
         Connection conn = null;
         ResultSet rs = null;
