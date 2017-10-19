@@ -278,14 +278,14 @@ public class DBWrapper {
         return allQuizzes;
     }
 
-    public static ArrayList<Question> getQuestions(Quiz quiz) {
+    public static ArrayList<Question> getQuestions( int quizId) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Question> allQuestions = new ArrayList<>();
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.question q INNER JOIN fmldb.quiz qz ON q.quiz_id = qz.id WHERE q.quiz_id = " + quiz.getQuizID() + ";");
+            preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.question q INNER JOIN fmldb.quiz qz ON q.quiz_id = qz.id WHERE q.quiz_id = " + quizId + ";");
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {

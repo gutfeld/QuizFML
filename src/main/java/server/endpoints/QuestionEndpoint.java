@@ -20,7 +20,9 @@ public class QuestionEndpoint {
     QuestionController controller = new QuestionController();
 
     @GET
-    public Response getQuestions(@PathParam("quizId")Quiz quizId) {
+    @Path ("{quizId}")
+    public Response getQuestions(@PathParam("quizId") int quizId) {
+
         ArrayList<Question> question = controller.getQuestions(quizId);
 
 
@@ -54,11 +56,11 @@ public class QuestionEndpoint {
     }
 
     @POST
-    public Response createQuestion(String jsonQuestion) {
+    public Response createQuestion(String jsonQuestion) throws Exception {
 
 
         try {
-            controller.createQuestion(new Gson().fromJson(jsonQuestion, Question.class));
+            controller.createQuestion(jsonQuestion);
         } catch (SQLException e) {
             e.printStackTrace();
         }
