@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import server.DBWrapper;
 import server.models.Course;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CourseController {
@@ -11,7 +12,7 @@ public class CourseController {
 
 
 
-    public ArrayList<Course> getCourses(){
+    public ArrayList<Course> getCourses() throws IOException, ClassNotFoundException {
          DBWrapper db = new DBWrapper();
 
         ArrayList<Course> c = db.getCourses();
