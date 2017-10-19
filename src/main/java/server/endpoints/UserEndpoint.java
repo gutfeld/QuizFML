@@ -62,7 +62,7 @@ public class UserEndpoint {
     @POST
     public Response authorizeUser(String data) throws Exception {
         User u = controller.login(data);
-        if (u.getUsername() != null) {
+        if (u != null) {
             return Response.status(200).entity(new Gson().toJson(u)).build();
         } else {
             return Response.status(400).entity("failure!").build();

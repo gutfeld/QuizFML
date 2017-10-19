@@ -11,24 +11,22 @@ public class User {
     private String firstName;
     private String lastName;
     private int type;
+    private long createdTime;
 
 
-    public User(String username, String password, String firstName, String lastName) {
 
 
-        this.username = username;
-        this.password = Digester.hash(password);
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-    public User(int userId, String username, String password, String firstName, String lastName, int type) {
+    public User(int userId, String username, String password, String firstName, String lastName, int type, Long createdTime) {
 
         this.userId = userId;
         this.username = username;
-        this.password = Digester.hash(password);
+        this.createdTime = createdTime;
+        this.password = Digester.hashWithSalt(password, username, createdTime);
         this.firstName = firstName;
         this.lastName = lastName;
         this.type = type;
+
+
     }
 
     public User() {
@@ -57,10 +55,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-
-
         this.password = Digester.hash(password);
-
     }
 
     public int getType() {
@@ -85,6 +80,17 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public long getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime() {
+        this.createdTime = System.currentTimeMillis() / 1000L;
+    }
+    public void setCreatedTime(long time) {
+        this.createdTime = time;
     }
 }
 
