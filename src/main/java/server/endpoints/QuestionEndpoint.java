@@ -24,7 +24,7 @@ public class QuestionEndpoint {
         ArrayList<Question> question = controller.getQuestions(quizId);
 
 
-
+//
             /*try {
                 controller.getQuestions(new Gson().fromJson(jsonQuestion, Question.class));
             } catch (SQLException e) {
