@@ -1,19 +1,18 @@
 package server.models;
 
 public class Choice {
-    private int questionId;
     private int choiceId;
     private String choiceTitle;
-    private boolean answer;
+    private int answer;
+    private int questionId;
 
 
     //
-    public Choice( int questionId, int choiceId, String choiceTitle, boolean answer){
-        this.questionId = questionId;
+    public Choice (int choiceId, String choiceTitle, int answer, int questionId) {
         this.choiceId = choiceId;
         this.choiceTitle = choiceTitle;
         this.answer = answer;
-//
+        this.questionId = questionId;
     }
 
     public int getQuestionId() {
@@ -40,11 +39,11 @@ public class Choice {
         this.choiceTitle = choiceTitle;
     }
 
-    public boolean isAnswer() {
+    public int isAnswer() {
         return answer;
     }
 
-    public void setAnswer(boolean answer) {
+    public void setAnswer(int answer) {
         this.answer = answer;
     }
 }

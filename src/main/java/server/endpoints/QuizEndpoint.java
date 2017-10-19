@@ -2,12 +2,11 @@ package server.endpoints;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import server.Controllers.QuizController;
+import server.models.Course;
 import server.models.Quiz;
+import server.models.User;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
@@ -20,20 +19,21 @@ public class QuizEndpoint {
 
     QuizController controller = new QuizController();
 
-    String demoJson = new Gson().toJson("test");
-    @GET
-    public Response getQuizs(){
+ /*   @GET
+    public Response getQuizzes(){
 
-        //ArrayList<Quiz> quizs;
+        Course course = new Course();
+
+        ArrayList<User> users = controller.getQuizzes();
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson("quizs"))
+                .entity(new Gson().toJson("quizzes"))
                 .build();
     }
 
-
+*/
     @GET
     @Path("{id}")
     public Response getQuizById(@PathParam("id") int quizID){
@@ -53,7 +53,6 @@ public class QuizEndpoint {
 
         controller.createQuiz(quiz);
 
-        // tilføj den nye quiz til quizArray'et her
 
         return Response
                 .status(200)
@@ -62,5 +61,25 @@ public class QuizEndpoint {
                 .build();
     }
 
-}
+    @DELETE
+    @Path("{id}")
+    public Response deleteQuiz(@PathParam("id") int quizID) throws Exception {
+
+        Boolean deleteQuiz = controller.deleteQuiz(quizID);
+
+        if (deleteQuiz == true) {
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson("Den burde vÊre slettet korrekt"))
+                    .build();
+        } else {
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson("Den er vidst ikke slettet korrekt"))
+                    .build();
+        }
+
+}}
 
