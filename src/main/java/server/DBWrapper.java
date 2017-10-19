@@ -96,10 +96,12 @@ public class DBWrapper {
     public static void createQuiz(Quiz quiz) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
+        //String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement = conn.prepareStatement("INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (?,?)");
+            preparedStatement.setString(1,quiz.getQuizTitle());
+            preparedStatement.setInt(2,quiz.getCourseID());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
