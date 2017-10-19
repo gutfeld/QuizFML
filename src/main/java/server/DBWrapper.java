@@ -116,7 +116,7 @@ public class DBWrapper {
         }
 
 
-    public static void createUser(User createUser) {
+    public static User createUser(User createUser) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         //String PS = "INSERT INTO user (firstName, lastName, userName, password, type) VALUES (?,?,?,?,?)";
@@ -139,12 +139,13 @@ public class DBWrapper {
             close(conn);
             close(preparedStatement);
         }
+        return createUser;
     }
 
 
 
 
-    public static void createQuiz(Quiz quiz) {
+    public static Quiz createQuiz(Quiz quiz) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (?,?)";
@@ -160,6 +161,7 @@ public class DBWrapper {
             close(conn);
             close(preparedStatement);
         }
+        return quiz;
     }
 
     public static Boolean deleteQuiz(int quizId) throws Exception {
@@ -192,7 +194,7 @@ public class DBWrapper {
 
 
 
-    public static Boolean createQuestion(Question question) {
+    public static Question createQuestion(Question question) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         int resultSet;
@@ -208,7 +210,7 @@ public class DBWrapper {
             resultSet = preparedStatement.executeUpdate();
 
             if (resultSet == 1) {
-                return true;
+
             }
 
         } catch (Exception e) {
@@ -217,7 +219,7 @@ public class DBWrapper {
             close(conn);
             close(preparedStatement);
         }
-        return false;
+        return question;
     }
 
 
@@ -237,7 +239,7 @@ public class DBWrapper {
         }
     }
 
-    public static void createChoice(Choice choice) {
+    public static Choice createChoice(Choice choice) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         //String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (" + choice.getChoiceTitle() + ", " + choice.isAnswer() + ", " + choice.getQuestionId() + ")";
@@ -255,6 +257,7 @@ public class DBWrapper {
             close(conn);
             close(preparedStatement);
         }
+        return choice;
     }
 
     public static void deleteChoice(Choice choice) {

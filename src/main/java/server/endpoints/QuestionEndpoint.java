@@ -58,12 +58,12 @@ public class QuestionEndpoint {
     */
     @POST
     public Response createQuestion(String jsonQuestion) throws Exception {
-        Boolean isCreated = controller.createQuestion(jsonQuestion);
+        Question q = controller.createQuestion(jsonQuestion);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"questionCreated\":" + isCreated + "\"\"}")
+                .entity(new Gson().toJson(q))
                 .build();
 
     }

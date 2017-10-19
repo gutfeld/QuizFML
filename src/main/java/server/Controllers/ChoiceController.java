@@ -25,10 +25,12 @@ public class ChoiceController {
         }
 
 
-        public void createChoice(String choice)throws Exception{
+        public Choice createChoice(String choice)throws Exception{
             Choice newChoice = new Gson() .fromJson(choice, Choice.class);
             db.createChoice(newChoice);
+            return newChoice;
         }
+
 
 
 

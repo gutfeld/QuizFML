@@ -46,13 +46,13 @@ public class UserEndpoint {
 
     @POST
     public Response createUser(String user) throws Exception {
-        controller.createUser(user);
+        User u = controller.createUser(user);
 
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"userCreated\":\"true\"}")
+                .entity(new Gson().toJson(u) )
                 .build();
     }
 

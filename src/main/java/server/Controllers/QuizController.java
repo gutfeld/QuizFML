@@ -20,11 +20,12 @@ public class QuizController {
         this.gson = gson;
     }
 
-    public void createQuiz (String quiz) throws Exception {
+    public Quiz createQuiz (String quiz) throws Exception {
 
         Quiz newQuiz = new Gson().fromJson(quiz, Quiz.class);
 
         db.createQuiz(newQuiz);
+        return newQuiz;
     }
 
     public ArrayList<Quiz> getQuizzes(int courseId) throws IOException, ClassNotFoundException {

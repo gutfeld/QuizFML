@@ -40,14 +40,14 @@ public class ChoiceEndpoint {
 
     @POST
     public Response createChoice(String jsonChoice) throws Exception {
-        cController.createChoice(jsonChoice);
-        Choice newChoice = new Gson().fromJson(jsonChoice, Choice.class);
+       Choice choice = cController.createChoice(jsonChoice);
+
         //tilføj det nye choice til choiceArray her
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"choiceCreated\":\"true\"}")
+                .entity(new Gson().toJson(choice))
                 .build();
 
 

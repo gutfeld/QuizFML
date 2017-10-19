@@ -37,13 +37,13 @@ public class QuizEndpoint {
     @POST
     public Response createQuiz(String quiz) throws Exception {
 
-        controller.createQuiz(quiz);
+        Quiz q = controller.createQuiz(quiz);
 
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"quizCreated\":\"true\"}")
+                .entity(new Gson().toJson(q))
                 .build();
     }
 

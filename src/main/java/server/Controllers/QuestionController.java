@@ -28,9 +28,9 @@ public class QuestionController {
 
     }
 
-    public Boolean createQuestion(String jsonQuestion) throws Exception {
+    public Question createQuestion(String jsonQuestion) throws Exception {
         Question newQuestion = new Gson().fromJson(jsonQuestion, Question.class);
-        Boolean isCreated = db.createQuestion(newQuestion);
-        return isCreated;
+        db.createQuestion(newQuestion);
+        return newQuestion;
     }
 }
