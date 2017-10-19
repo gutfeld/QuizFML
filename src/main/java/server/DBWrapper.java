@@ -14,9 +14,14 @@ public class DBWrapper {
 * Derefter skal man erstarte DEFAULT_USERNAME til jeres lokale database navn og DEFAULT_PASSWORD til jeres lokale
 * pass.*/
     public static final String DEFAULT_URL = "jdbc:mysql://distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com:3306/fmldb";
-   // public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fmldb";
+   // public static final String DEFAULT_URL = "jdbc:mysql://localhost:8080/fmldb";
+
+
     private static final String DEFAULT_USERNAME = "dis2017";
+
+    //min lokale Jpost999????
     private static final String DEFAULT_PASSWORD = "doekdis2017";
+
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     public static Connection getConnection(String url, String username, String password) throws SQLException {
