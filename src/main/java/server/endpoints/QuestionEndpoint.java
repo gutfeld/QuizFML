@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import server.Controllers.QuestionController;
 import server.DBWrapper;
 import server.models.Question;
+import server.models.Quiz;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -11,32 +12,37 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 @Path("/Question")
 public class QuestionEndpoint {
-    @GET
-        public Response getQuestion(String jsonQuestion) {
+    QuestionController controller = new QuestionController();
 
-            QuestionController controller = new QuestionController();
-            try {
-                controller.createQuestion(new Gson().fromJson(jsonQuestion, Question.class));
+    @GET
+    public Response getQuestions(@PathParam("quizId")Quiz quizId) {
+        ArrayList<Question> question = controller.getQuestions(quizId);
+
+
+
+            /*try {
+                controller.getQuestions(new Gson().fromJson(jsonQuestion, Question.class));
             } catch (SQLException e) {
                 e.printStackTrace();
-            }
+            }*/
 
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson("questions"))
+                .entity(new Gson().toJson(question))
                 .build();
 
     }
 
     @GET
-    @Path ("{questionId}")
-    public Response getQuestionById(@PathParam("questionId") int questionId){
+    @Path("{questionId}")
+    public Response getQuestionById(@PathParam("questionId") int questionId) {
 
 
         return Response
@@ -50,7 +56,7 @@ public class QuestionEndpoint {
     @POST
     public Response createQuestion(String jsonQuestion) {
 
-        QuestionController controller = new QuestionController();
+
         try {
             controller.createQuestion(new Gson().fromJson(jsonQuestion, Question.class));
         } catch (SQLException e) {

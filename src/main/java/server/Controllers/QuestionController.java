@@ -18,19 +18,17 @@ public class QuestionController {
         this.gson = new Gson();
     }
 
-/*
+
 
     public ArrayList <Question> getQuestions (Quiz quiz){
         ArrayList<Question> q = db.getQuestions(quiz);
         return q;
 
-        //for (int i = 0; i < q.size(); i++)
-            //System.out.println(q.get(i));
-        //return q;
-    }
-*/
-    public void createQuestion(Question question) throws SQLException {
-        db.createQuestion(question);
+
     }
 
+    public void createQuestion(Question question) throws SQLException {
+        Question newQuestion = new Gson().fromJson(question, Question.class);
+        db.createQuestion(newQuestion);
+    }
 }
