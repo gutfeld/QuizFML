@@ -120,10 +120,12 @@ public class DBWrapper {
     public static void createQuiz(Quiz quiz) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
+        String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (?,?)";
         try {
             conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.setString(1, quiz.getQuizTitle());
+            preparedStatement.setInt(2, quiz.getCourseID());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -278,6 +280,8 @@ public class DBWrapper {
         return allCourses;
     }
 
+   /* public static ArrayList<Quiz> getQuizzes(int courseId) {
+
     public static ArrayList<Quiz> getQuizzes(Course course) throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
@@ -301,6 +305,9 @@ public class DBWrapper {
         }
         return allQuizzes;
     }
+<<<<<<< HEAD
+*/
+
 
     public static ArrayList<Question> getQuestions(Quiz quiz) throws IOException, ClassNotFoundException {
         Connection conn = null;
