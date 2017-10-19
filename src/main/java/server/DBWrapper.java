@@ -1,6 +1,5 @@
 package server;
 
-import com.google.gson.Gson;
 import server.models.Quiz;
 import server.models.User;
 
@@ -77,12 +76,10 @@ public class DBWrapper {
     }
 
 
-    public static void createUser(User createUser) {
+    public static void createUser(User createUser) throws Exception {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        //String PS = "INSERT INTO user (firstName, lastName, userName, password, type) VALUES (?,?,?,?,?)";
 
-        //String PS = "INSERT INTO user (firstName) VALUES (" + createUser.getFirstName()+")";
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
             preparedStatement = conn.prepareStatement("INSERT INTO user (firstName, lastName, userName, password, type) VALUES (?,?,?,?,?)");
@@ -102,7 +99,7 @@ public class DBWrapper {
 
 
 
-    public static void createQuiz(Quiz quiz) {
+    public static void createQuiz(Quiz quiz) throws Exception {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         //String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
@@ -120,10 +117,10 @@ public class DBWrapper {
         }
     }
 
-    public static void deleteQuiz(Quiz quiz) {
+    public static void deleteQuiz(int quizId) throws Exception {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String PS = "DELETE FROM fmldb.quiz WHERE fmldb.quiz.id = " + quiz.getQuizID();
+        String PS = "DELETE FROM fmldb.quiz WHERE fmldb.quiz.id = " + quizId;
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
             conn.prepareStatement(PS);

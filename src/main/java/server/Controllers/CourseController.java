@@ -7,9 +7,6 @@ import server.models.Course;
 import java.util.ArrayList;
 
 public class CourseController {
-    Gson gson;
-
-
 
     public ArrayList<Course> getCourses(){
          DBWrapper db = new DBWrapper();

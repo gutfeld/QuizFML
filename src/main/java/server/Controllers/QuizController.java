@@ -16,14 +16,15 @@ public class QuizController {
     }
 
     public void createQuiz (String quiz) throws Exception {
-
         Quiz newQuiz = new Gson().fromJson(quiz, Quiz.class);
-
         db.createQuiz(newQuiz);
     }
 
-    public ArrayList<Quiz> getQuizzes(int courseId) {
+    public void deleteQuiz (int quizId) throws Exception {
+        db.deleteQuiz(quizId);
+    }
 
+    public ArrayList<Quiz> getQuizzes(int courseId) {
         ArrayList<Quiz> allQuizzes = db.getQuizzes(courseId);
         // for (int i = 0; i < allQuizzes.size(); i++) System.out.println(allQuizzes.get(i));
         return allQuizzes;

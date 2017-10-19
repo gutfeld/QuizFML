@@ -4,10 +4,7 @@ import com.google.gson.JsonObject;
 import server.Controllers.QuizController;
 import server.models.Quiz;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
@@ -32,22 +29,18 @@ public class QuizEndpoint {
                 .build();
     }
 
-    /*
-    @GET
+    @DELETE
     @Path("{id}")
-    public Response getQuizById(@PathParam("id") int quizID){
+    public Response deleteQuiz(@PathParam("id") int quizID) throws Exception {
 
-
-        //Quiz foundQuiz;
+        controller.deleteQuiz(quizID);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson("foundQuiz"))
+                .entity(new Gson().toJson("Vi håber den er slettet ik'"))
                 .build();
     }
-    */
-
 
     @POST
     public Response createQuiz(String quiz) throws Exception {
