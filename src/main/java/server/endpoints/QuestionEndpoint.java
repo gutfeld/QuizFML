@@ -62,7 +62,7 @@ public class QuestionEndpoint {
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"questionCreated\":" + isCreated + "\"\"}")
+                .entity("{\"question created\":"+isCreated+"}")
                 .build();
 
     }

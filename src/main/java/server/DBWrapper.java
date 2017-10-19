@@ -13,7 +13,7 @@ public class DBWrapper {
 /*Når i arbejder lokalt, så lav to streger foran DEFAULT_URL og fjerne de to fra den neden under.
 * Derefter skal man erstarte DEFAULT_USERNAME til jeres lokale database navn og DEFAULT_PASSWORD til jeres lokale
 * pass.*/
-    public static final String DEFAULT_URL = "jdbc:mysql://distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com:3306/fmldb";
+    public static final String DEFAULT_URL = "jdbc:mysql://distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com:3306/";
    // public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fmldb";
     private static final String DEFAULT_USERNAME = "dis2017";
     private static final String DEFAULT_PASSWORD = "doekdis2017";
@@ -143,7 +143,10 @@ public class DBWrapper {
 
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement("INSERT INTO fmldb.question (questionTitle, quiz_id) VALUES (?, ?)");
+            //preparedStatement = conn.prepareStatement("INSERT INTO question (questionTitle, quiz_id) VALUES (?, ?)");
+            preparedStatement = conn.prepareStatement("INSERT INTO fmldb.question (questionTitle, quiz_id)\n" +
+                    "VALUES (?, ?);");
+            System.out.println("title: " + question.getQuestionTitle() + " quizId: " + question.getQuizID());
             preparedStatement.setString(1, question.getQuestionTitle());
             preparedStatement.setInt(2, question.getQuizID());
             resultSet = preparedStatement.executeUpdate();

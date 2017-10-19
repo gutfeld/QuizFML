@@ -2,14 +2,14 @@ package server.models;
 
 public class Question {
 
-    private int quizID;
+    private int quiz_id;
     private int questionId;
     private String questionTitle;
 
 
-    public Question(int quizId, String questionTitle, int questionId) {
+    public Question(int quiz_id, String questionTitle, int questionId) {
 
-        this.quizID = quizId;
+        this.quiz_id = quiz_id;
         this.questionTitle = questionTitle;
         this.questionId = questionId;
 
@@ -20,11 +20,11 @@ public class Question {
     }
 
     public int getQuizID() {
-        return quizID;
+        return quiz_id;
     }
 
     public void setQuizID(int quizID) {
-        this.quizID = quizID;
+        this.quiz_id = quizID;
     }
 
     public int getQuestionId() {
