@@ -1,9 +1,11 @@
 package server;
 
 import com.google.gson.Gson;
+import server.Controllers.Config;
 import server.models.Quiz;
 import server.models.User;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -17,27 +19,40 @@ public class DBWrapper {
    // public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fmldb";
     private static final String DEFAULT_USERNAME = "dis2017";
     private static final String DEFAULT_PASSWORD = "doekdis2017";
-    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
-    public static Connection getConnection(String url, String username, String password) throws SQLException {
+    private static Connection connection = null;
+
+    public static Connection getConnection() throws SQLException, IOException, ClassNotFoundException {
+
         try {
+            Config config = new Config();
+            config.initConfig();
 
-            try {
-                Class.forName("com.mysql.jdbc.Driver").newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        } catch (ClassNotFoundException e) {
+            System.out.println();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return DriverManager.getConnection(url, username, password);
+
+        try {
+            try {
+                Class.forName(JDBC_DRIVER).newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            connection = DriverManager.getConnection("jdbc:mysql://" + Config.getDatabaseHost() + ":" + Config.getDatabasePort() + "/" + Config.getDatabaseName(), Config.getDatabaseUsername(), Config.getDatabasePassword());
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return connection;
     }
 
+
     public static User authorizeUser (String username, String password) throws Exception {
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
-        Connection connection = getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+        Connection connection = getConnection();
         User userFound = null;
 
         try {
@@ -74,7 +89,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createUser.getFirstName() + ", " + createUser.getLastName() + ", " + createUser.getUsername() + ", " + createUser.getPassword() + ",1)";
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -91,7 +106,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createAdmin.getFirstName() + ", " + createAdmin.getLastName() + ", " + createAdmin.getUsername() + ", " + createAdmin.getPassword() + ",2)";
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -105,10 +120,12 @@ public class DBWrapper {
     public static void createQuiz(Quiz quiz) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
+        String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (?,?)";
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.setString(1, quiz.getQuizTitle());
+            preparedStatement.setInt(2, quiz.getCourseID());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,7 +140,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "DELETE FROM fmldb.quiz WHERE fmldb.quiz.id = " + quiz.getQuizID();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -139,7 +156,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.question (questionTitle, quiz_id) VALUES (" + question.getQuestionTitle() + ", " + question.getQuizID() + ")";
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -155,7 +172,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "DELETE FROM fmldb.question WHERE fmldb.question.id = " + question.getQuestionId();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -172,7 +189,7 @@ public class DBWrapper {
         //String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (" + choice.getChoiceTitle() + ", " + choice.isAnswer() + ", " + choice.getQuestionId() + ")";
         String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (?,?,?)";
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement(PS);
             preparedStatement.setString(1, choice.getChoiceTitle());
             preparedStatement.setInt(2, choice.isAnswer());
@@ -191,7 +208,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "DELETE FROM fmldb.choice WHERE fmldb.choice.id = " + choice.getChoiceId();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -225,9 +242,8 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         ArrayList<User> allUsers = new ArrayList<>();
         try {
-            //Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement("SELECT * FROM fmldb.user");
+            conn = DBWrapper.getConnection();
+            preparedStatement = conn.prepareStatement("SELECT * FROM user");
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
@@ -244,13 +260,13 @@ public class DBWrapper {
         return allUsers;
     }
 
-    public static ArrayList<Course> getCourses() {
+    public static ArrayList<Course> getCourses() throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Course> allCourses = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement("SELECT * FROM fmldb.course");
             rs = preparedStatement.executeQuery();
 
@@ -268,13 +284,15 @@ public class DBWrapper {
         return allCourses;
     }
 
-    public static ArrayList<Quiz> getQuizzes(Course course) {
+   /* public static ArrayList<Quiz> getQuizzes(int courseId) {
+
+    public static ArrayList<Quiz> getQuizzes(Course course) throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Quiz> allQuizzes = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.quiz q INNER JOIN fmldb.course c ON q.course_id = c.id WHERE q.course_id =" + course.getCourseID() + ";");
             rs = preparedStatement.executeQuery();
 
@@ -291,14 +309,17 @@ public class DBWrapper {
         }
         return allQuizzes;
     }
+<<<<<<< HEAD
+*/
 
-    public static ArrayList<Question> getQuestions(Quiz quiz) {
+
+    public static ArrayList<Question> getQuestions(Quiz quiz) throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Question> allQuestions = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.question q INNER JOIN fmldb.quiz qz ON q.quiz_id = qz.id WHERE q.quiz_id = " + quiz.getQuizID() + ";");
             rs = preparedStatement.executeQuery();
 
@@ -317,21 +338,30 @@ public class DBWrapper {
     }
 
 
+<<<<<<< HEAD
     public static ArrayList<Choice> getChoices(int questionID) {
+=======
+    public static ArrayList<Choice> getChoices(Question question) throws IOException {
+>>>>>>> origin
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Choice> allChoices = new ArrayList<>();
         try {
+<<<<<<< HEAD
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
             preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + questionID + ";");
+=======
+            conn = DBWrapper.getConnection( );
+            preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + question.getQuestionId() + ";");
+>>>>>>> origin
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
                 Choice choice = new Choice(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4));
                 allChoices.add(choice);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             close(conn);
@@ -342,14 +372,14 @@ public class DBWrapper {
     }
 
     // Giver alle de fag som en bestemt bruger er tilmeldt
-    public static ArrayList<Course> getUsersCourses (User user) {
+    public static ArrayList<Course> getUsersCourses (User user) throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
-        String PS = "SELECT c.* FROM fmldb.user_course uc INNER JOIN fmldb.user u ON u.id = uc.user_id INNER JOIN fmldb.course c ON uc.course_id = c.id WHERE u.id =" + user.getId() ;
+        String PS = "SELECT c.* FROM fmldb.user_course uc INNER JOIN fmldb.user u ON u.id = uc.user_id INNER JOIN fmldb.course c ON uc.course_id = c.id WHERE u.id =" + user.getUserId();
         PreparedStatement preparedStatement = null;
         ArrayList<Course> courseArrayList = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement(PS);
             rs = preparedStatement.executeQuery();
 
@@ -369,14 +399,14 @@ public class DBWrapper {
 
 
     // Giver alle brugere som er tilmeldt et bestemt fag s
-    public static ArrayList<User> getCoursesUsers (Course course) {
+    public static ArrayList<User> getCoursesUsers (Course course) throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
         String PS = "SELECT u.* FROM fmldb.user_course uc INNER JOIN fmldb.course c ON uc.course_id = c.id INNER JOIN fmldb.user u ON uc.user_id = u.id WHERE c.id =" + course.getCourseID();
         PreparedStatement preparedStatement = null;
         ArrayList<User> userArrayList = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement(PS);
             rs = preparedStatement.executeQuery();
 

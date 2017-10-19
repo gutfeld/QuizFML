@@ -10,22 +10,58 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
 
-@Path("/User")
+@Path("/user")
+
+
 public class UserEndpoint {
-    UserController uController = new UserController();
+
+    UserController controller = new UserController();
+
 
     @GET
-    public Response get() {
-        return Response.status(200).entity("User").build();
-    }
-        ArrayList<User> users = uController.getUsers();
+    public Response getUsers() {
 
-        //return Response.status(200).entity(new Gson().toJson(users)).build();
+        ArrayList<User> users = controller.getUsers();
+
+        return Response.status(200)
+                .type("application/json")
+                .entity(new Gson().toJson(users))
+                .build();
+
+    }
+
+    @GET
+    @Path("{id}")
+
+    public Response getUserById(@PathParam("id") int UserId) {
+
+        // User foundUser
+
+        return Response
+            .status(200)
+            .type("application/json")
+            .entity(new Gson().toJson("foundUser"))
+            .build();
+    }
+
+    @POST
+    public Response createUser(String user) throws Exception {
+        controller.createUser(user);
+
+
+        return Response
+                .status(200)
+                .type("application/json")
+                .entity("{\"userCreated\":\"true\"}")
+                .build();
+    }
+
+
 
     @Path("/login")
     @POST
     public Response authorizeUser(String data) throws Exception {
-        User u = uController.login(data);
+        User u = controller.login(data);
         if (u.getUsername() != null) {
             return Response.status(200).entity(new Gson().toJson(u)).build();
         } else {
