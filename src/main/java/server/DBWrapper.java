@@ -16,10 +16,8 @@ public class DBWrapper {
     public static final String DEFAULT_URL = "jdbc:mysql://distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com:3306/fmldb";
    // public static final String DEFAULT_URL = "jdbc:mysql://localhost:8080/fmldb";
 
-
     private static final String DEFAULT_USERNAME = "dis2017";
 
-    //min lokale Jpost999????
     private static final String DEFAULT_PASSWORD = "doekdis2017";
 
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
