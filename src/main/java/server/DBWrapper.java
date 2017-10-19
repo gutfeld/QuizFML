@@ -313,18 +313,18 @@ public class DBWrapper {
     }
 
 
-    public static ArrayList<Choice> getChoices(Question question) {
+    public static ArrayList<Choice> getChoices(int questionID) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Choice> allChoices = new ArrayList<>();
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + question.getQuestionId() + ";");
+            preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + questionID + ";");
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                Choice choice = new Choice(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getBoolean(4));
+                Choice choice = new Choice(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4));
                 allChoices.add(choice);
             }
         } catch (SQLException e) {
