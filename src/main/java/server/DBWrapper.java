@@ -325,16 +325,14 @@ public class DBWrapper {
         return allCourses;
     }
 
-   /* public static ArrayList<Quiz> getQuizzes(int courseId) {
-
-    public static ArrayList<Quiz> getQuizzes(Course course) throws IOException, ClassNotFoundException {
+    public static ArrayList<Quiz> getQuizzes(int courseId) throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Quiz> allQuizzes = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection( );
-            preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.quiz q INNER JOIN fmldb.course c ON q.course_id = c.id WHERE q.course_id =" + course.getCourseID() + ";");
+            conn = DBWrapper.getConnection();
+            preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.quiz q INNER JOIN fmldb.course c ON q.course_id = c.id WHERE q.course_id =" + courseId + ";");
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
@@ -350,8 +348,6 @@ public class DBWrapper {
         }
         return allQuizzes;
     }
-<<<<<<< HEAD
-*/
 
 
     public static ArrayList<Question> getQuestions(Quiz quiz) throws IOException, ClassNotFoundException {
