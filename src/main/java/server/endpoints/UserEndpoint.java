@@ -44,14 +44,9 @@ public class UserEndpoint {
             .build();
     }
 
-@POST
-    public Response createUser(String jsonUser) {
-
-        try {
-            controller.createUser(new Gson().fromJson(jsonUser, User.class));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @POST
+    public Response createUser(String user) throws Exception {
+        controller.createUser(user);
 
 
         return Response
@@ -62,21 +57,8 @@ public class UserEndpoint {
     }
 
 
-    @POST
-        public Response createAdmin(String jsonAdmin) {
 
-        try {
-            controller.createUser(new Gson().fromJson(jsonAdmin, User.class));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity("{\"adminCreated\":\"true\"}")
-                .build();
-    @Path("/login")
+     /*   @Path("/login")
     @POST
     public Response authorizeUser(String data) throws Exception {
         User u = uController.login(data);
@@ -87,6 +69,6 @@ public class UserEndpoint {
         }
 
     }
-
+*/
 
 }
