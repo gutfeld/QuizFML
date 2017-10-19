@@ -186,10 +186,14 @@ public class DBWrapper {
     public static void createChoice(Choice choice) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (" + choice.getChoiceTitle() + ", " + choice.isAnswer() + ", " + choice.getQuestionId() + ")";
+        //String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (" + choice.getChoiceTitle() + ", " + choice.isAnswer() + ", " + choice.getQuestionId() + ")";
+        String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (?,?,?)";
         try {
             conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.setString(1, choice.getChoiceTitle());
+            preparedStatement.setInt(2, choice.isAnswer());
+            preparedStatement.setInt(3, choice.getQuestionId());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -334,18 +338,21 @@ public class DBWrapper {
     }
 
 
-    public static ArrayList<Choice> getChoices(Question question) throws IOException {
+
+    public static ArrayList<Choice> getChoices(int questionID) throws IOException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Choice> allChoices = new ArrayList<>();
         try {
+
             conn = DBWrapper.getConnection( );
-            preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + question.getQuestionId() + ";");
+            preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + questionID + ";");
+
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                Choice choice = new Choice(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getBoolean(4));
+                Choice choice = new Choice(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4));
                 allChoices.add(choice);
             }
         } catch (Exception e) {
