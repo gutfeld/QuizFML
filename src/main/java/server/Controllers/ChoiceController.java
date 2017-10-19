@@ -18,7 +18,7 @@ public class ChoiceController {
             this.gson = gson;
         }
 
-        public ArrayList<Choice> getChoice(int questionID) {
+        public ArrayList<Choice> getChoices(int questionID) {
             ArrayList<Choice> choices = db.getChoices(questionID);
             return choices;
         }

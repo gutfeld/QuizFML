@@ -169,10 +169,14 @@ public class DBWrapper {
     public static void createChoice(Choice choice) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (" + choice.getChoiceTitle() + ", " + choice.isAnswer() + ", " + choice.getQuestionId() + ")";
+        //String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (" + choice.getChoiceTitle() + ", " + choice.isAnswer() + ", " + choice.getQuestionId() + ")";
+        String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (?,?,?)";
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
             preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.setString(1, choice.getChoiceTitle());
+            preparedStatement.setInt(2, choice.isAnswer());
+            preparedStatement.setInt(3, choice.getQuestionId());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

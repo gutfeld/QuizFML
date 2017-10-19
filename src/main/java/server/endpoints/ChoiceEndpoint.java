@@ -16,23 +16,17 @@ import java.util.ArrayList;
 public class ChoiceEndpoint {
     ChoiceController cController = new ChoiceController();
 
-    @GET
-    public Response getChoices(){
 
-        //ArrayList<Choice> choice;
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity(new Gson().toJson("choice"))
-                .build();
 
-    }
+
 
     @GET
     @Path("/{id}")
     public Response getChoiceById(@PathParam("id") int questionID){
-        ArrayList<Choice> choices = cController.getChoice(questionID);
-        //Choice foundChoice
+        ArrayList<Choice> choices = cController.getChoices(questionID);
+
+
+        //Choice foundChoice =
 
         return Response
                 .status(200)
