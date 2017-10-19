@@ -3,19 +3,19 @@ package server.Controllers;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
-public class Config {
+public final class Config {
 
     private static String DATABASE_HOST;
     private static Integer DATABASE_PORT;
     private static String DATABASE_USERNAME;
     private static String DATABASE_PASSWORD;
+    private static String DATABASE_NAME;
 
-public void initConfig() throws IOException {
+
+
+    public void initConfig() throws IOException {
 
     //Initialiserer variabler
     JsonObject json = new JsonObject();
@@ -42,6 +42,7 @@ public void initConfig() throws IOException {
     DATABASE_PORT = Integer.parseInt(json.get("DATABASE_PORT").toString().replace("\"", ""));
     DATABASE_USERNAME = json.get("DATABASE_USERNAME").toString().replace("\"", "");
     DATABASE_PASSWORD = json.get("DATABASE_PASSWORD").toString().replace("\"", "");
+    DATABASE_NAME = json.get("DATABASE_NAME").toString().replace("\"", "");
 
 }
 
@@ -61,5 +62,7 @@ public void initConfig() throws IOException {
      return DATABASE_PASSWORD;
     }
 
-
+    public static String getDatabaseName() {
+        return DATABASE_NAME;
+    }
 }

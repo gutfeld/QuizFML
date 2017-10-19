@@ -1,30 +1,36 @@
 package server;
 
 import com.google.gson.Gson;
+import server.Controllers.Config;
 import server.models.Quiz;
 import server.models.User;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
 import server.models.*;
 
 public class DBWrapper {
-/*Når i arbejder lokalt, så lav to streger foran DEFAULT_URL og fjerne de to fra den neden under.
+
+    /*Når i arbejder lokalt, så lav to streger foran DEFAULT_URL og fjerne de to fra den neden under.
 * Derefter skal man erstarte DEFAULT_USERNAME til jeres lokale database navn og DEFAULT_PASSWORD til jeres lokale
 * pass.*/
-    public static final String DEFAULT_URL = "jdbc:mysql://distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com:3306/fmldb";
-   // public static final String DEFAULT_URL = "jdbc:mysql://localhost:8080/fmldb";
 
-    private static final String DEFAULT_USERNAME = "dis2017";
+    private static Connection connection = null;
 
-    private static final String DEFAULT_PASSWORD = "doekdis2017";
+    public static Connection getConnection() throws SQLException, IOException {
 
-    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-
-    public static Connection getConnection(String url, String username, String password) throws SQLException {
         try {
+            Config config = new Config();
+            config.initConfig();
 
+            System.out.println();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
             try {
                 Class.forName("com.mysql.jdbc.Driver").newInstance();
             } catch (InstantiationException e) {
@@ -32,14 +38,19 @@ public class DBWrapper {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+
+            connection = DriverManager.getConnection("jdbc:mysql://" + Config.getDatabaseHost() + ":" + Config.getDatabasePort() + "/" + Config.getDatabaseName(), Config.getDatabaseUsername(), Config.getDatabasePassword());
+
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return DriverManager.getConnection(url, username, password);
+        return connection;
     }
 
+
     public static User authorizeUser (String username, String password) throws Exception {
-        Connection connection = getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+        Connection connection = getConnection();
         User userFound = null;
 
         try {
@@ -76,7 +87,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createUser.getFirstName() + ", " + createUser.getLastName() + ", " + createUser.getUsername() + ", " + createUser.getPassword() + ",1)";
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -93,7 +104,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createAdmin.getFirstName() + ", " + createAdmin.getLastName() + ", " + createAdmin.getUsername() + ", " + createAdmin.getPassword() + ",2)";
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -109,7 +120,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (" + quiz.getQuizTitle() + ", " + quiz.getCourseID() + ")";
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -125,7 +136,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "DELETE FROM fmldb.quiz WHERE fmldb.quiz.id = " + quiz.getQuizID();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -141,7 +152,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.question (questionTitle, quiz_id) VALUES (" + question.getQuestionTitle() + ", " + question.getQuizID() + ")";
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -157,7 +168,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "DELETE FROM fmldb.question WHERE fmldb.question.id = " + question.getQuestionId();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -173,7 +184,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (" + choice.getChoiceTitle() + ", " + choice.isAnswer() + ", " + choice.getQuestionId() + ")";
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -189,7 +200,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "DELETE FROM fmldb.choice WHERE fmldb.choice.id = " + choice.getChoiceId();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -223,7 +234,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         ArrayList<User> allUsers = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement("SELECT * FROM user");
             rs = preparedStatement.executeQuery();
 
@@ -241,13 +252,13 @@ public class DBWrapper {
         return allUsers;
     }
 
-    public static ArrayList<Course> getCourses() {
+    public static ArrayList<Course> getCourses() throws IOException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Course> allCourses = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement("SELECT * FROM fmldb.course");
             rs = preparedStatement.executeQuery();
 
@@ -265,13 +276,13 @@ public class DBWrapper {
         return allCourses;
     }
 
-    public static ArrayList<Quiz> getQuizzes(Course course) {
+    public static ArrayList<Quiz> getQuizzes(Course course) throws IOException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Quiz> allQuizzes = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.quiz q INNER JOIN fmldb.course c ON q.course_id = c.id WHERE q.course_id =" + course.getCourseID() + ";");
             rs = preparedStatement.executeQuery();
 
@@ -289,13 +300,13 @@ public class DBWrapper {
         return allQuizzes;
     }
 
-    public static ArrayList<Question> getQuestions(Quiz quiz) {
+    public static ArrayList<Question> getQuestions(Quiz quiz) throws IOException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Question> allQuestions = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.question q INNER JOIN fmldb.quiz qz ON q.quiz_id = qz.id WHERE q.quiz_id = " + quiz.getQuizID() + ";");
             rs = preparedStatement.executeQuery();
 
@@ -314,13 +325,13 @@ public class DBWrapper {
     }
 
 
-    public static ArrayList<Choice> getChoices(Question question) {
+    public static ArrayList<Choice> getChoices(Question question) throws IOException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Choice> allChoices = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + question.getQuestionId() + ";");
             rs = preparedStatement.executeQuery();
 
@@ -339,14 +350,14 @@ public class DBWrapper {
     }
 
     // Giver alle de fag som en bestemt bruger er tilmeldt
-    public static ArrayList<Course> getUsersCourses (User user) {
+    public static ArrayList<Course> getUsersCourses (User user) throws IOException {
         Connection conn = null;
         ResultSet rs = null;
         String PS = "SELECT c.* FROM fmldb.user_course uc INNER JOIN fmldb.user u ON u.id = uc.user_id INNER JOIN fmldb.course c ON uc.course_id = c.id WHERE u.id =" + user.getId() ;
         PreparedStatement preparedStatement = null;
         ArrayList<Course> courseArrayList = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement(PS);
             rs = preparedStatement.executeQuery();
 
@@ -366,14 +377,14 @@ public class DBWrapper {
 
 
     // Giver alle brugere som er tilmeldt et bestemt fag s
-    public static ArrayList<User> getCoursesUsers (Course course) {
+    public static ArrayList<User> getCoursesUsers (Course course) throws IOException {
         Connection conn = null;
         ResultSet rs = null;
         String PS = "SELECT u.* FROM fmldb.user_course uc INNER JOIN fmldb.course c ON uc.course_id = c.id INNER JOIN fmldb.user u ON uc.user_id = u.id WHERE c.id =" + course.getCourseID();
         PreparedStatement preparedStatement = null;
         ArrayList<User> userArrayList = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection( );
             preparedStatement = conn.prepareStatement(PS);
             rs = preparedStatement.executeQuery();
 
