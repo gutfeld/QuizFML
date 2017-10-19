@@ -58,7 +58,7 @@ public class UserEndpoint {
 
 
 
-     /*  @Path("/login")
+       @Path("/login")
     @POST
     public Response authorizeUser(String data) throws Exception {
         User u = controller.login(data);
@@ -69,6 +69,6 @@ public class UserEndpoint {
         }
 
     }
-*/
+
 
 }
