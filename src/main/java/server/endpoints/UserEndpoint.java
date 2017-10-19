@@ -1,6 +1,7 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
+import server.Controllers.Log;
 import server.DBWrapper;
 import server.Controllers.UserController;
 import server.models.User;
@@ -15,11 +16,14 @@ import java.util.ArrayList;
 
 public class UserEndpoint {
 
+    Log log = new Log();
     UserController controller = new UserController();
 
 
     @GET
     public Response getUsers() {
+
+        log.writeLog(this.getClass().getName(), this, "We are now getting users", 2);
 
         ArrayList<User> users = controller.getUsers();
 
@@ -35,6 +39,8 @@ public class UserEndpoint {
 
     public Response getUserById(@PathParam("id") int UserId) {
 
+        log.writeLog(this.getClass().getName(), this, "We are now getting user by Id", 2);
+
         // User foundUser
 
         return Response
@@ -46,6 +52,9 @@ public class UserEndpoint {
 
     @POST
     public Response createUser(String user) throws Exception {
+
+        log.writeLog(this.getClass().getName(), this, "We are now creating user", 2);
+
         controller.createUser(user);
 
 
@@ -61,10 +70,15 @@ public class UserEndpoint {
     @Path("/login")
     @POST
     public Response authorizeUser(String data) throws Exception {
+
+        log.writeLog(this.getClass().getName(), this, "We are now authorizing user for login", 2);
+
         User u = controller.login(data);
         if (u != null) {
+            log.writeLog(this.getClass().getName(), this, "User logged in", 2);
             return Response.status(200).entity(new Gson().toJson(u)).build();
         } else {
+            log.writeLog(this.getClass().getName(), this, "User not logged in because of failure", 1);
             return Response.status(400).entity("failure!").build();
         }
 

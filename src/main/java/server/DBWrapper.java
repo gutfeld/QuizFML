@@ -118,7 +118,9 @@ public class DBWrapper {
 
             preparedStatement.executeUpdate();
         } catch (Exception e) {
+            
             e.printStackTrace();
+
         } finally {
             close(conn);
             close(preparedStatement);

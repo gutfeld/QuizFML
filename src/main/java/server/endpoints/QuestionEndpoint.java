@@ -1,6 +1,7 @@
 package server.endpoints;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import server.Controllers.Log;
 import server.Controllers.QuestionController;
 import server.DBWrapper;
 import server.models.Question;
@@ -18,12 +19,13 @@ import java.util.ArrayList;
 
 @Path("/Question")
 public class QuestionEndpoint {
+    Log log = new Log();
     QuestionController controller = new QuestionController();
 
     @GET
     @Path ("{quizId}")
     public Response getQuestions(@PathParam("quizId") int quizId) throws IOException, ClassNotFoundException {
-
+        log.writeLog(this.getClass().getName(), this, "We are now getting questions", 2);
         ArrayList<Question> question = controller.getQuestions(quizId);
 
 
@@ -58,6 +60,9 @@ public class QuestionEndpoint {
     */
     @POST
     public Response createQuestion(String jsonQuestion) throws Exception {
+
+        log.writeLog(this.getClass().getName(), this, "We are now creating a question", 2);
+
         Boolean isCreated = controller.createQuestion(jsonQuestion);
 
         return Response

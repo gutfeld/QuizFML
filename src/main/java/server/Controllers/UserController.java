@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class UserController {
 
+    Log log = new Log();
     ArrayList<User> users;
     Gson gson;
     DBWrapper db = new DBWrapper();
@@ -20,18 +21,20 @@ public class UserController {
     }
 
     public ArrayList<User> getUsers() {
-
+        log.writeLog(this.getClass().getName(), this, "We are now getting users", 0);
         ArrayList<User> users = db.getUsers();
         for (int i = 0; i < users.size(); i++) System.out.println(users.get(i));
         return users;
     }
 
     public User login(String data) throws Exception {
+        log.writeLog(this.getClass().getName(), this, "User trying to log in", 2);
         System.out.println(data);
         Login login = null;
         try {
             login = new Gson().fromJson(data, Login.class);
         } catch (Exception e) {
+            log.writeLog(this.getClass().getName(), this, "Catching an exception", 1);
             e.printStackTrace();
         }
         System.out.println(login.getUsername());
@@ -41,6 +44,7 @@ public class UserController {
 
     //public User getUser (int userId){
     public void createUser(String user) throws Exception {
+        log.writeLog(this.getClass().getName(), this, "We are now creating a user", 0);
         User newUser = new Gson().fromJson(user, User.class);
         newUser.setCreatedTime();
         /* String hashedPassword = Digester.hashWIthSalt(u.getPassword()); Her kan der hashes og tilføjes salt til password

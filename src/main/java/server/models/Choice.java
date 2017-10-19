@@ -1,6 +1,9 @@
 package server.models;
 
+import server.Controllers.Log;
+
 public class Choice {
+    Log log = new Log();
     private int choiceId;
     private String choiceTitle;
     private int answer;

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class QuestionController {
     Gson gson;
     DBWrapper db = new DBWrapper ();
+    Log log = new Log();
 
 
     public QuestionController(){
@@ -22,6 +23,7 @@ public class QuestionController {
 
 
     public ArrayList <Question> getQuestions (int quiz) throws IOException, ClassNotFoundException {
+        log.writeLog(this.getClass().getName(), this, "We are now getting questions", 2);
         ArrayList<Question> q = db.getQuestions(quiz);
         return q;
 
@@ -29,6 +31,7 @@ public class QuestionController {
     }
 
     public Boolean createQuestion(String jsonQuestion) throws Exception {
+        log.writeLog(this.getClass().getName(), this, "We are now creating a question", 0);
         Question newQuestion = new Gson().fromJson(jsonQuestion, Question.class);
         Boolean isCreated = db.createQuestion(newQuestion);
         return isCreated;

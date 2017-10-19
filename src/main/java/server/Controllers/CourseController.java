@@ -9,11 +9,13 @@ import java.util.ArrayList;
 
 public class CourseController {
     Gson gson;
-
+    Log log = new Log();
 
 
     public ArrayList<Course> getCourses() throws IOException, ClassNotFoundException {
-         DBWrapper db = new DBWrapper();
+
+        log.writeLog(this.getClass().getName(), this, "We are now courses", 0);
+        DBWrapper db = new DBWrapper();
 
         ArrayList<Course> c = db.getCourses();
         return c;

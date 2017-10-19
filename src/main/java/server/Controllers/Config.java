@@ -22,7 +22,7 @@ public final class Config {
     JsonObject json = new JsonObject();
     JsonParser parser = new JsonParser();
 
-    log.writeLog(this.getClass().getName(), this, "We are now including the config file", 2);
+    log.writeLog(this.getClass().getName(), this, "We are now including the config file", 0);
 
     //Referer til config.json filen i resources
     InputStream input = this.getClass().getResourceAsStream("/config.json");
