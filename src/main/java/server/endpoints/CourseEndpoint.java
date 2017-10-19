@@ -1,6 +1,7 @@
 package server.endpoints;
 import com.google.gson.Gson;
 import server.Controllers.CourseController;
+import server.Controllers.XORController;
 import server.models.Course;
 import server.models.User;
 
@@ -19,13 +20,16 @@ public class CourseEndpoint {
     String demoJson = new Gson().toJson("Courses");
     @GET
     public Response getCourses() {
-        CourseController courseController = new CourseController();
+        CourseController courseController = new  CourseController();
         ArrayList<Course> courses = courseController.getCourses();
+        String output = new Gson().toJson(courses);
+        String encryptedOutput = XORController.encryptDecryptXOR(output);
+        encryptedOutput = new Gson().toJson(encryptedOutput);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(courses))
+                .entity(encryptedOutput)
                 .build();
     }
 }
