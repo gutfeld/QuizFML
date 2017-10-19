@@ -48,6 +48,15 @@ public class DBWrapper {
 
             while (resultSet.next()) {
                 try {
+                    /*
+                    userFound = new User(
+                        resultSet.getString("userName"),
+                        resultSet.getString("password")
+                    );*/
+                    userFound = new User();
+                    userFound.setUsername(resultSet.getString("userName"));
+                    userFound.setPassword(resultSet.getString("password"));
+                    /*
                     userFound = new User(
                             resultSet.getInt("id"),
                             resultSet.getString("firstName"),
@@ -55,7 +64,7 @@ public class DBWrapper {
                             resultSet.getString("userName"),
                             resultSet.getString("password"),
                             resultSet.getInt("type")
-                    );
+                    );*/
 
                 } catch (SQLException e) {
                     e.printStackTrace();
