@@ -4,6 +4,6 @@
   "DATABASE_USERNAME" : "dis2017",
   "DATABASE_PASSWORD" : "doekdis2017",
   "DATABASE_NAME" : "fmldb",
-  "ENCRYPTION" : true
+  "ENCRYPTION" : false
 
 }
