@@ -36,7 +36,6 @@ public class DBWrapper {
     }
 
     public static User authorizeUser (String username, String password) throws Exception {
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
         Connection connection = getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
         User userFound = null;
 
@@ -221,9 +220,8 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         ArrayList<User> allUsers = new ArrayList<>();
         try {
-            //Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement("SELECT * FROM fmldb.user");
+            preparedStatement = conn.prepareStatement("SELECT * FROM user");
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {

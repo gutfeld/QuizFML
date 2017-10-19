@@ -15,13 +15,11 @@ public class UserController {
     public UserController() {
         this.gson = gson;
     }
-public static void main(String []args) {
-    UserController uController = new UserController();
-    uController.getUsers();
-}
+
 
     public ArrayList<User> getUsers() {
         ArrayList<User> users = db.getUsers();
+
         return users;
     }
 

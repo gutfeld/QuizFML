@@ -10,15 +10,15 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
 
-@Path("/User")
+@Path("/user")
 public class UserEndpoint {
     UserController uController = new UserController();
 
     @GET
     public Response get() {
-        return Response.status(200).entity("User").build();
-    }
         ArrayList<User> users = uController.getUsers();
+        return Response.status(200).entity(new Gson().toJson(users)).build();
+    }
 
         //return Response.status(200).entity(new Gson().toJson(users)).build();
 
