@@ -16,27 +16,16 @@ import java.util.ArrayList;
 @Path("/Courses")
 public class CourseEndpoint {
 
-    private getCourses courses;
-
-    public test() {
-        courses = new getCourses();
-        ArrayList<c> getCourses = courses.getArrayList();
-    }
-
-    String demoJson = new Gson().toJson("test");
+    String demoJson = new Gson().toJson("Courses");
     @GET
-    public Response getCourses(){
-         ArrayList<c> courses = new ArrayList<c>();
+    public Response getCourses() {
+        ArrayList<Course> courses = new ArrayList<>();
 
-        return courses
+        return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson("courses"))
+                .entity(new Gson().toJson("Courses"))
                 .build();
-
-
-
-
 
 
     /* String demoJson = new Gson().toJson("test");
@@ -56,7 +45,7 @@ public class CourseEndpoint {
 
 
     }
-    @GET
+ /*   @GET
     @Path("{id}")
     public Response getCourseById(@PathParam("id") int courseID){
 
@@ -75,5 +64,7 @@ public class CourseEndpoint {
                 .build();
     }
 
+
+*/
 }
 
