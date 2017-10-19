@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.ArrayList;
 
 @Path("/Choice")
@@ -22,7 +23,7 @@ public class ChoiceEndpoint {
 
     @GET
     @Path("/{id}")
-    public Response getChoiceById(@PathParam("id") int questionID){
+    public Response getChoiceById(@PathParam("id") int questionID) throws IOException{
         ArrayList<Choice> choices = cController.getChoices(questionID);
 
 

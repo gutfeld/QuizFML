@@ -6,6 +6,7 @@ import server.models.Choice;
 import server.endpoints.ChoiceEndpoint;
 import server.models.Question;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ChoiceController {
@@ -18,7 +19,7 @@ public class ChoiceController {
             this.gson = gson;
         }
 
-        public ArrayList<Choice> getChoices(int questionID) {
+        public ArrayList<Choice> getChoices(int questionID) throws IOException {
             ArrayList<Choice> choices = db.getChoices(questionID);
             return choices;
         }

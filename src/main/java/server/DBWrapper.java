@@ -338,23 +338,17 @@ public class DBWrapper {
     }
 
 
-<<<<<<< HEAD
-    public static ArrayList<Choice> getChoices(int questionID) {
-=======
-    public static ArrayList<Choice> getChoices(Question question) throws IOException {
->>>>>>> origin
+
+    public static ArrayList<Choice> getChoices(int questionID) throws IOException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Choice> allChoices = new ArrayList<>();
         try {
-<<<<<<< HEAD
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + questionID + ";");
-=======
+
             conn = DBWrapper.getConnection( );
-            preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + question.getQuestionId() + ";");
->>>>>>> origin
+            preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + questionID + ";");
+
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
