@@ -13,6 +13,7 @@ public final class Config {
     private static String DATABASE_PASSWORD;
     private static String DATABASE_NAME;
     private static boolean ENCRYPTION;
+    private static Log log = new Log();
 
 
 
@@ -21,6 +22,8 @@ public final class Config {
     //Initialiserer variabler
     JsonObject json = new JsonObject();
     JsonParser parser = new JsonParser();
+
+    log.writeLog(this.getClass().getName(), this, "We are now including the config file", 2);
 
     //Referer til config.json filen i resources
     InputStream input = this.getClass().getResourceAsStream("/config.json");

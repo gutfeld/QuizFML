@@ -285,7 +285,7 @@ public class DBWrapper {
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                User user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getLong(7));
+                User user = new User(rs.getInt("id"), rs.getString("userName") , rs.getString("password"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("type"), rs.getLong("createdTime"));
                 allUsers.add(user);
             }
         } catch (Exception e) {
