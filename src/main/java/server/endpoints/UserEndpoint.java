@@ -1,6 +1,7 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
+import server.DBWrapper;
 import server.Controllers.UserController;
 import server.models.User;
 
@@ -9,7 +10,7 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
 
-@Path("/User")
+@Path("/user")
 
 
 public class UserEndpoint {
@@ -75,6 +76,17 @@ public class UserEndpoint {
                 .type("application/json")
                 .entity("{\"adminCreated\":\"true\"}")
                 .build();
+    @Path("/login")
+    @POST
+    public Response authorizeUser(String data) throws Exception {
+        User u = uController.login(data);
+        if (u.getUsername() != null) {
+            return Response.status(200).entity(new Gson().toJson(u)).build();
+        } else {
+            return Response.status(400).entity("failure!").build();
+        }
+
     }
+
 
 }

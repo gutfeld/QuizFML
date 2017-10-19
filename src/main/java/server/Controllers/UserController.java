@@ -25,6 +25,13 @@ public class UserController {
         return users;
     }
 
+    public User login(String data) throws Exception {
+        User user = new Gson().fromJson(data, User.class);
+        User userFound = DBWrapper.authorizeUser(user.getUsername(), user.getPassword());
+        return userFound;
+    }
+
+    //public User getUser (int userId){
     public void createUser(User createUser) throws Exception {
 
         /* String hashedPassword = Digester.hashWIthSalt(u.getPassword()); Her kan der hashes og tilføjes salt til password
