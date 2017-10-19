@@ -8,21 +8,16 @@ import java.util.ArrayList;
 
 public class CourseController {
     Gson gson;
-    DBWrapper db = new DBWrapper();
 
 
 
-   public ArrayList<Course> getCourses(){
+    public ArrayList<Course> getCourses(){
          DBWrapper db = new DBWrapper();
-        ArrayList<Course> courses = db.getCourses();
 
-       for(int i = 0; i < courses.size(); i++)
+      /* for(int i = 0; i < courses.size(); i++)
        System.out.println(courses.get(i));
-        return courses;
-   }
-
-
-    public ArrayList <Course> getCourses(){
+       return courses;
+       */
 
         ArrayList<Course> c = db.getCourses();
         return c;
