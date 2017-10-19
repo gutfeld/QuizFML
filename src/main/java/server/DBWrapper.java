@@ -55,65 +55,49 @@ public class DBWrapper {
     public static User authorizeUser(String username, String password) throws Exception {
         Connection connection = getConnection();
         User userFound = null;
+        User userFound_final = null;
+
 
         //Get user by username
-        PreparedStatement getUserByUserName = connection.prepareStatement("select * from user where username  = ?");
+        PreparedStatement getUserByUserName = connection.prepareStatement("select * from user where username  = ? ORDER BY createdTime DESC LIMIT 1");
         getUserByUserName.setString(1, username);
         ResultSet resultSet = getUserByUserName.executeQuery();
 
-        if (!resultSet.next()){
-            return null;
+        String saltet_password = "";
+        while (resultSet.next()) {
+            userFound = new User();
+            userFound.setUsername(resultSet.getString("userName"));
+            userFound.setCreatedTime(resultSet.getLong("createdTime"));
+            saltet_password = Digester.hashWithSalt(password, resultSet.getString("userName"), resultSet.getLong("createdTime"));
         }
-         //   System.out.println("Forkert username");
 
+        try {
+            PreparedStatement authenticate = connection.prepareStatement("select * from user where username = ? AND password = ?");
+            authenticate.setString(1, username);
+            authenticate.setString(2, saltet_password);
 
+            ResultSet resultSet2 = authenticate.executeQuery();
 
-            String saltet_password = "";
-            while (resultSet.next()) {
-                userFound = new User();
-                userFound.setUsername(resultSet.getString("userName"));
-                userFound.setCreatedTime(resultSet.getLong("createdTime"));
-                saltet_password = Digester.hashWithSalt(password, resultSet.getString("userName"), resultSet.getLong("createdTime"));
-            }
-            //If user does not exist return error
+            while (resultSet2.next()) {
+                try {
 
-
-            try {
-                PreparedStatement authenticate = connection.prepareStatement("select * from user where username = ? AND password = ?");
-                authenticate.setString(1, username);
-                authenticate.setString(2, saltet_password);
-
-                ResultSet resultSet2 = authenticate.executeQuery();
-
-                while (resultSet2.next()) {
-                    try {
-                    /*
-                    userFound = new User(
-                        resultSet.getString("userName"),
-                        resultSet.getString("password")
-                    );*/
-                        userFound = new User();
-                        userFound.setUsername(resultSet2.getString("userName"));
-                        userFound.setPassword(resultSet2.getString("password"));
-                    /*
-                    userFound = new User(
-                            resultSet.getInt("id"),
-                            resultSet.getString("firstName"),
-                            resultSet.getString("lastName"),
-                            resultSet.getString("userName"),
-                            resultSet.getString("password"),
-                            resultSet.getInt("type")
-                    );*/
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    userFound_final = new User();
+                    userFound_final.setUsername(resultSet2.getString("userName"));
+                    userFound_final.setPassword(resultSet2.getString("password"));
+                    userFound_final.setUserId(resultSet2.getInt("id"));
+                    userFound_final.setFirstName(resultSet2.getString("firstName"));
+                    userFound_final.setLastName(resultSet2.getString("lastName"));
+                    userFound_final.setType(resultSet2.getInt("type"));
+                    userFound_final.setCreatedTime(resultSet2.getLong("createdTime"));
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-            return userFound;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return userFound_final;
+    }
 
 
     public static void createUser(User createUser) {
@@ -128,7 +112,7 @@ public class DBWrapper {
             preparedStatement.setString(1, createUser.getFirstName());
             preparedStatement.setString(2, createUser.getLastName());
             preparedStatement.setString(3, createUser.getUsername());
-            preparedStatement.setString(4, createUser.getPassword());
+            preparedStatement.setString(4, Digester.hashWithSalt(createUser.getPassword(), createUser.getUsername(), createUser.getCreatedTime()));
             preparedStatement.setInt(5, createUser.getType());
             preparedStatement.setLong(6, createUser.getCreatedTime());
 
