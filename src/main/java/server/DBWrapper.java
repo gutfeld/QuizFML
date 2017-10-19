@@ -37,16 +37,14 @@ public class DBWrapper {
         try {
             try {
                 Class.forName(JDBC_DRIVER).newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
             connection = DriverManager.getConnection("jdbc:mysql://" + Config.getDatabaseHost() + ":" + Config.getDatabasePort() + "/" + Config.getDatabaseName(), Config.getDatabaseUsername(), Config.getDatabasePassword());
 
 
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return connection;
@@ -91,7 +89,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createUser.getFirstName() + ", " + createUser.getLastName() + ", " + createUser.getUsername() + ", " + createUser.getPassword() + ",1)";
         try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -256,7 +254,7 @@ public class DBWrapper {
         return allUsers;
     }
 
-    public static ArrayList<Course> getCourses() throws IOException {
+    public static ArrayList<Course> getCourses() throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
