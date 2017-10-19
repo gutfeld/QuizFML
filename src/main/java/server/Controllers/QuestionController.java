@@ -20,15 +20,16 @@ public class QuestionController {
 
 
 
-    public ArrayList <Question> getQuestions (Integer quiz){
+    public ArrayList <Question> getQuestions (int quiz){
         ArrayList<Question> q = db.getQuestions(quiz);
         return q;
 
 
     }
 
-    public void createQuestion(String jsonQuestion) throws SQLException {
+    public Boolean createQuestion(String jsonQuestion) throws Exception {
         Question newQuestion = new Gson().fromJson(jsonQuestion, Question.class);
-        db.createQuestion(newQuestion);
+        Boolean isCreated = db.createQuestion(newQuestion);
+        return isCreated;
     }
 }

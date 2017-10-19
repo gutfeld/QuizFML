@@ -41,7 +41,7 @@ public class QuestionEndpoint {
                 .build();
 
     }
-
+/*
     @GET
     @Path("{questionId}")
     public Response getQuestionById(@PathParam("questionId") int questionId) {
@@ -54,21 +54,15 @@ public class QuestionEndpoint {
                 .build();
 
     }
-
+*/
     @POST
     public Response createQuestion(String jsonQuestion) throws Exception {
-
-
-        try {
-            controller.createQuestion(jsonQuestion);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            Boolean isCreated = controller.createQuestion(jsonQuestion);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"questionCreated\":\"true\"}")
+                .entity("{\"questionCreated\":" + isCreated + "\"\"}")
                 .build();
 
     }

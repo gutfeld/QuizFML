@@ -136,20 +136,29 @@ public class DBWrapper {
         }
     }
 
-    public static void createQuestion(Question question) {
+    public static Boolean createQuestion(Question question) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.question (questionTitle, quiz_id) VALUES (" + question.getQuestionTitle() + ", " + question.getQuizID() + ")";
+        int resultSet;
+
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement(PS);
-            preparedStatement.executeUpdate();
+            preparedStatement = conn.prepareStatement("INSERT INTO fmldb.question (questionTitle, quiz_id) VALUES (?, ?)");
+            preparedStatement.setString(1, question.getQuestionTitle());
+            preparedStatement.setInt(2, question.getQuizID());
+            resultSet = preparedStatement.executeUpdate();
+
+            if (resultSet == 1) {
+                return true;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             close(conn);
             close(preparedStatement);
         }
+        return false;
     }
 
     public static void deleteQuestion(Question question) {
