@@ -33,30 +33,18 @@ public class CourseEndpoint {
     @Path("{id}")
     public Response getCourseById(@PathParam("id") int courseID){
 
-
-        //Course foundCourse;
-
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity(new Gson().toJson("foundCourse"))
-                .build();
-    }
-
-    @POST
-    public Response createUser(String jsonCourse) {
-
         CourseController controller = new CourseController();
         try {
             controller.createCourse(new Gson().fromJson(jsonCourse,Course.class));
         } catch (SQLException e){
             e.printStackTrace();
         }
+        //Course foundCourse;
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"courseCreated\":\"true\"}")
+                .entity(new Gson().toJson("foundCourse"))
                 .build();
     }
 
