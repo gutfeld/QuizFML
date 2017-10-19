@@ -87,10 +87,15 @@ public class DBWrapper {
     public static void createUser(User createUser) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createUser.getFirstName() + ", " + createUser.getLastName() + ", " + createUser.getUsername() + ", " + createUser.getPassword() + ",1)";
+        String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (?, ?, ?, ?, ?)";
         try {
             conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.setString(1, createUser.getFirstName());
+            preparedStatement.setString(2, createUser.getLastName());
+            preparedStatement.setString(3, createUser.getUsername());
+            preparedStatement.setString(4, createUser.getPassword());
+            preparedStatement.setInt(5, createUser.getType());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,21 +106,7 @@ public class DBWrapper {
     }
 
 
-    public static void createAdmin(User createAdmin) {
-        Connection conn = null;
-        PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createAdmin.getFirstName() + ", " + createAdmin.getLastName() + ", " + createAdmin.getUsername() + ", " + createAdmin.getPassword() + ",2)";
-        try {
-            conn = DBWrapper.getConnection();
-            preparedStatement = conn.prepareStatement(PS);
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close(conn);
-            close(preparedStatement);
-        }
-    }
+
 
     public static void createQuiz(Quiz quiz) {
         Connection conn = null;
@@ -135,21 +126,35 @@ public class DBWrapper {
         }
     }
 
-    public static void deleteQuiz(Quiz quiz) {
+    public static Boolean deleteQuiz(int quizId) throws Exception {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String PS = "DELETE FROM fmldb.quiz WHERE fmldb.quiz.id = " + quiz.getQuizID();
+        String PS = "DELETE FROM fmldb.quiz WHERE fmldb.quiz.id = ?";
+        int check = 0;
         try {
-            conn = DBWrapper.getConnection( );
-            conn.prepareStatement(PS);
-            preparedStatement.executeUpdate();
+            conn = DBWrapper.getConnection();
+            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.setInt(1, quizId);
+            check = preparedStatement.executeUpdate();
+
+            if (check == 1) {
+                return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             close(conn);
             close(preparedStatement);
         }
+        return false;
     }
+
+
+
+
+
+
+
 
     public static void createQuestion(Question question) {
         Connection conn = null;

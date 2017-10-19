@@ -48,4 +48,7 @@ public class QuizController {
     }
 
 */
+   public Boolean deleteQuiz (int quizId) throws Exception {
+       return db.deleteQuiz(quizId);
+   }
 }
