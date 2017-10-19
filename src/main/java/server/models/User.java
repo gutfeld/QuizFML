@@ -1,6 +1,8 @@
 package server.models;
 
 
+import server.security.Digester;
+
 public class User {
 
     private int userId;
@@ -15,7 +17,7 @@ public class User {
 
 
         this.username = username;
-        this.password = password;
+        this.password = Digester.hash(password);
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -23,7 +25,7 @@ public class User {
 
         this.userId = userId;
         this.username = username;
-        this.password = password;
+        this.password = Digester.hash(password);
         this.firstName = firstName;
         this.lastName = lastName;
         this.type = type;
@@ -55,7 +57,10 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+
+
+        this.password = Digester.hash(password);
+
     }
 
     public int getType() {
