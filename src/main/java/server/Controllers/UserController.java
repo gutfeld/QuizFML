@@ -23,8 +23,13 @@ public static void main(String []args) {
     public ArrayList<User> getUsers() {
 
         ArrayList<User> users = db.getUsers();
-        for(int i = 0; i<users.size(); i++) System.out.println(users.get(i));
         return users;
+    }
+
+    public User login(String data) throws Exception {
+        User user = new Gson().fromJson(data, User.class);
+        User userFound = DBWrapper.authorizeUser(user.getUsername(), user.getPassword());
+        return userFound;
     }
 
     //public User getUser (int userId){
