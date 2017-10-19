@@ -1,6 +1,7 @@
 package server.endpoints;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import server.Controllers.QuizController;
 import server.models.Quiz;
 
 import javax.ws.rs.GET;
@@ -15,6 +16,10 @@ import java.util.ArrayList;
 
 @Path("/quiz")
 public class QuizEndpoint {
+
+
+    QuizController controller = new QuizController();
+
     String demoJson = new Gson().toJson("test");
     @GET
     public Response getQuizs(){
@@ -44,10 +49,10 @@ public class QuizEndpoint {
     }
 
     @POST
-    public Response createUser(String jsonQuiz) {
+    public Response createQuiz(String quiz) throws Exception {
 
+        controller.createQuiz(quiz);
 
-        Quiz newQuiz = new Gson().fromJson(jsonQuiz, Quiz.class);
         // tilføj den nye quiz til quizArray'et her
 
         return Response

@@ -58,10 +58,10 @@ public class UserEndpoint {
 
 
 
-     /*   @Path("/login")
+       @Path("/login")
     @POST
     public Response authorizeUser(String data) throws Exception {
-        User u = uController.login(data);
+        User u = controller.login(data);
         if (u.getUsername() != null) {
             return Response.status(200).entity(new Gson().toJson(u)).build();
         } else {
@@ -69,6 +69,6 @@ public class UserEndpoint {
         }
 
     }
-*/
+
 
 }
