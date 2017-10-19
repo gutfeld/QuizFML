@@ -2,6 +2,7 @@ package server.Controllers;
 
 import com.google.gson.Gson;
 import server.DBWrapper;
+import server.models.Login;
 import server.models.User;
 
 import java.sql.Connection;
@@ -26,8 +27,15 @@ public class UserController {
     }
 
     public User login(String data) throws Exception {
-        User user = new Gson().fromJson(data, User.class);
-        User userFound = DBWrapper.authorizeUser(user.getUsername(), user.getPassword());
+        System.out.println(data);
+        Login login = null;
+        try {
+            login = new Gson().fromJson(data, Login.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(login.getUsername());
+        User userFound = DBWrapper.authorizeUser(login.getUsername(), login.getPassword());
         return userFound;
     }
 
