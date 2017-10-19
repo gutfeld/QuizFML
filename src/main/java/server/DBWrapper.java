@@ -265,14 +265,14 @@ public class DBWrapper {
         return allCourses;
     }
 
-    public static ArrayList<Quiz> getQuizzes(Course course) {
+    public static ArrayList<Quiz> getQuizzes(int courseId) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Quiz> allQuizzes = new ArrayList<>();
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.quiz q INNER JOIN fmldb.course c ON q.course_id = c.id WHERE q.course_id =" + course.getCourseID() + ";");
+            preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.quiz q INNER JOIN fmldb.course c ON q.course_id = c.id WHERE q.course_id =" + courseId + ";");
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {

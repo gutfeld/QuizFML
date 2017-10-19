@@ -17,23 +17,22 @@ import java.util.ArrayList;
 @Path("/quiz")
 public class QuizEndpoint {
 
-
     QuizController controller = new QuizController();
 
-    String demoJson = new Gson().toJson("test");
     @GET
-    public Response getQuizs(){
+    @Path("{id}")
+    public Response getQuizzes(@PathParam("id") int courseId){
 
-        //ArrayList<Quiz> quizs;
+        ArrayList<Quiz> allQuizzes = controller.getQuizzes(courseId);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson("quizs"))
+                .entity(new Gson().toJson(allQuizzes))
                 .build();
     }
 
-
+    /*
     @GET
     @Path("{id}")
     public Response getQuizById(@PathParam("id") int quizID){
@@ -47,6 +46,8 @@ public class QuizEndpoint {
                 .entity(new Gson().toJson("foundQuiz"))
                 .build();
     }
+    */
+
 
     @POST
     public Response createQuiz(String quiz) throws Exception {
