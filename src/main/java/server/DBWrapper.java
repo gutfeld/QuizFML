@@ -13,22 +13,63 @@ public class DBWrapper {
 /*Når i arbejder lokalt, så lav to streger foran DEFAULT_URL og fjerne de to fra den neden under.
 * Derefter skal man erstarte DEFAULT_USERNAME til jeres lokale database navn og DEFAULT_PASSWORD til jeres lokale
 * pass.*/
-    //public static final String DEFAULT_URL = "distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com";
-    public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fmldb";
+    public static final String DEFAULT_URL = "jdbc:mysql://distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com:3306/fmldb";
+   // public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fmldb";
     private static final String DEFAULT_USERNAME = "dis2017";
     private static final String DEFAULT_PASSWORD = "doekdis2017";
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     public static Connection getConnection(String url, String username, String password) throws SQLException {
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver").newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return DriverManager.getConnection(url, username, password);
     }
 
-    public static void createUser(User createUser)throws Exception {
+    public static User authorizeUser (String username, String password) throws Exception {
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
+        Connection connection = getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+        User userFound = null;
+
+        try {
+            PreparedStatement authenticate = connection.prepareStatement("select * from user where username = ? AND password = ?");
+            authenticate.setString(1, username);
+            authenticate.setString(2, password);
+
+            ResultSet resultSet = authenticate.executeQuery();
+
+            while (resultSet.next()) {
+                try {
+                    userFound = new User(
+                            resultSet.getInt("id"),
+                            resultSet.getString("firstName"),
+                            resultSet.getString("lastName"),
+                            resultSet.getString("userName"),
+                            resultSet.getString("password"),
+                            resultSet.getInt("type")
+                    );
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userFound;
+    }
+
+
+    public static void createUser(User createUser) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createUser.getFirstName() + ", " + createUser.getLastName() + ", " + createUser.getUsername() + ", " + createUser.getPassword() + ",1)";
@@ -189,7 +230,7 @@ public class DBWrapper {
                 User user = new User(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4), rs.getString(5),rs.getInt(6));
                 allUsers.add(user);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             close(conn);
@@ -295,12 +336,12 @@ public class DBWrapper {
         }
         return allChoices;
     }
-/*
+
     // Giver alle de fag som en bestemt bruger er tilmeldt
-    public static ArrayList getUsersCourses (User user, Course course) {
+    public static ArrayList<Course> getUsersCourses (User user) {
         Connection conn = null;
         ResultSet rs = null;
-        String PS = null;
+        String PS = "SELECT c.* FROM fmldb.user_course uc INNER JOIN fmldb.user u ON u.id = uc.user_id INNER JOIN fmldb.course c ON uc.course_id = c.id WHERE u.id =" + user.getId() ;
         PreparedStatement preparedStatement = null;
         ArrayList<Course> courseArrayList = new ArrayList<>();
         try {
@@ -320,18 +361,35 @@ public class DBWrapper {
             close(preparedStatement);
         }
         return courseArrayList;
-
     }
-*/
-/*
-    // Giver alle brugere som er tilmeldt et bestemt fag
-    public static ArrayList getCoursesUsers () {
+
+
+    // Giver alle brugere som er tilmeldt et bestemt fag s
+    public static ArrayList<User> getCoursesUsers (Course course) {
         Connection conn = null;
         ResultSet rs = null;
+        String PS = "SELECT u.* FROM fmldb.user_course uc INNER JOIN fmldb.course c ON uc.course_id = c.id INNER JOIN fmldb.user u ON uc.user_id = u.id WHERE c.id =" + course.getCourseID();
         PreparedStatement preparedStatement = null;
+        ArrayList<User> userArrayList = new ArrayList<>();
+        try {
+            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            preparedStatement = conn.prepareStatement(PS);
+            rs = preparedStatement.executeQuery();
 
+            while (rs.next()) {
+                User tempUser = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6));
+                userArrayList.add(tempUser);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(rs);
+            close(preparedStatement);
+        }
+        return userArrayList;
     }
-*/
+
     public static void close(Connection connection) {
         try {
             if (connection != null) {
