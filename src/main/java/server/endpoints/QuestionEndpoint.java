@@ -1,10 +1,8 @@
 package server.endpoints;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import server.Controllers.QuestionController;
-import server.DBWrapper;
 import server.models.Question;
-import server.models.Quiz;
+import server.security.XORController;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,7 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -25,6 +22,9 @@ public class QuestionEndpoint {
     public Response getQuestions(@PathParam("quizId") int quizId) throws IOException, ClassNotFoundException {
 
         ArrayList<Question> question = controller.getQuestions(quizId);
+        String output = new Gson().toJson(question);
+        String encryptedOutput = XORController.encryptDecryptXOR(output);
+        encryptedOutput = new Gson().toJson(encryptedOutput);
 
 
 //
@@ -38,7 +38,7 @@ public class QuestionEndpoint {
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(question))
+                .entity(encryptedOutput)
                 .build();
 
     }

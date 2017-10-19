@@ -4,6 +4,7 @@ package server.endpoints;
 import com.google.gson.Gson;
 import server.Controllers.ChoiceController;
 import server.models.Choice;
+import server.security.XORController;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -25,14 +26,16 @@ public class ChoiceEndpoint {
     @Path("/{id}")
     public Response getChoiceById(@PathParam("id") int questionID) throws IOException{
         ArrayList<Choice> choices = cController.getChoices(questionID);
+        String output = new Gson().toJson(choices);
+        String encryptedOutput = XORController.encryptDecryptXOR(output);
+        encryptedOutput = new Gson().toJson(encryptedOutput);
 
 
-        //Choice foundChoice =
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(choices))
+                .entity(new Gson().toJson(encryptedOutput))
                 .build();
 
     }
@@ -42,12 +45,14 @@ public class ChoiceEndpoint {
     public Response createChoice(String jsonChoice) throws Exception {
         cController.createChoice(jsonChoice);
         Choice newChoice = new Gson().fromJson(jsonChoice, Choice.class);
-        //tilføj det nye choice til choiceArray her
+        String output = new Gson().toJson(newChoice);
+        String encryptedOutput = XORController.encryptDecryptXOR(output);
+        encryptedOutput = new Gson().toJson(encryptedOutput);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"choiceCreated\":\"true\"}")
+                .entity(encryptedOutput)
                 .build();
 
 

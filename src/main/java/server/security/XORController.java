@@ -1,9 +1,7 @@
-package server.Controllers;
+package server.security;
 
 public class XORController {
 
-        //Fjernes og vi bruger istedet boolean i config-filen
-        private final static boolean encrypted = true;
 
         /**
          Kryptering skal kunne slås til og fra i configfilen
@@ -19,7 +17,7 @@ public class XORController {
         // Samzme metode skal laves på klienten for at dekryptere!!
         public static String encryptDecryptXOR(String willBeEncrypted) {
             //If: HER SKAL VI HAVE json.get("ENCRYPTION").getAsBoolean();
-            if(encrypted) {
+            if(Globals.config.getEncryption()) {
                 //Vi vælger selv værdierne til nøglen
                 char[] key = {'K', 'O', 'C', 'H'};
                 //En StringBuilder er en klasse, der gør det muligt at ændre en string
