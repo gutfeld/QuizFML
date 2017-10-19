@@ -57,7 +57,7 @@ public class DBWrapper {
         User userFound = null;
 
         //Get user by username
-        PreparedStatement getUserByUserName = connection.prepareStatement("select * from user where username  = ?");
+        PreparedStatement getUserByUserName = connection.prepareStatement("select * from user where userName  = ?");
         getUserByUserName.setString(1, username);
         ResultSet resultSet = getUserByUserName.executeQuery();
 
@@ -79,7 +79,7 @@ public class DBWrapper {
 
 
             try {
-                PreparedStatement authenticate = connection.prepareStatement("select * from user where username = ? AND password = ?");
+                PreparedStatement authenticate = connection.prepareStatement("select * from user where userName = ? AND password = ?");
                 authenticate.setString(1, username);
                 authenticate.setString(2, saltet_password);
 
@@ -192,21 +192,34 @@ public class DBWrapper {
 
 
 
-    public static void createQuestion(Question question) {
+    public static Boolean createQuestion(Question question) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.question (questionTitle, quiz_id) VALUES (" + question.getQuestionTitle() + ", " + question.getQuizID() + ")";
+        int resultSet;
+
         try {
-            conn = DBWrapper.getConnection( );
-            preparedStatement = conn.prepareStatement(PS);
-            preparedStatement.executeUpdate();
+            conn = DBWrapper.getConnection();
+            //preparedStatement = conn.prepareStatement("INSERT INTO question (questionTitle, quiz_id) VALUES (?, ?)");
+            preparedStatement = conn.prepareStatement("INSERT INTO fmldb.question (questionTitle, quiz_id)\n" +
+                    "VALUES (?, ?);");
+            System.out.println("title: " + question.getQuestionTitle() + " quizId: " + question.getQuizID());
+            preparedStatement.setString(1, question.getQuestionTitle());
+            preparedStatement.setInt(2, question.getQuizID());
+            resultSet = preparedStatement.executeUpdate();
+
+            if (resultSet == 1) {
+                return true;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             close(conn);
             close(preparedStatement);
         }
+        return false;
     }
+
 
     public static void deleteQuestion(Question question) {
         Connection conn = null;
@@ -350,14 +363,14 @@ public class DBWrapper {
     }
 
 
-    public static ArrayList<Question> getQuestions(Quiz quiz) throws IOException, ClassNotFoundException {
+    public static ArrayList<Question> getQuestions( int quizId) throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         ArrayList<Question> allQuestions = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection( );
-            preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.question q INNER JOIN fmldb.quiz qz ON q.quiz_id = qz.id WHERE q.quiz_id = " + quiz.getQuizID() + ";");
+            conn = DBWrapper.getConnection();
+            preparedStatement = conn.prepareStatement("SELECT q.* FROM fmldb.question q INNER JOIN fmldb.quiz qz ON q.quiz_id = qz.id WHERE q.quiz_id = " + quizId + ";");
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
@@ -373,6 +386,7 @@ public class DBWrapper {
         }
         return allQuestions;
     }
+
 
 
 
