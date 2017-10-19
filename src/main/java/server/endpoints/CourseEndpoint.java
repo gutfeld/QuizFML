@@ -19,52 +19,14 @@ public class CourseEndpoint {
     String demoJson = new Gson().toJson("Courses");
     @GET
     public Response getCourses() {
-        ArrayList<Course> courses = new ArrayList<>();
+        CourseController courseController = new CourseController();
+        ArrayList<Course> courses = courseController.getCourses();
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson("Courses"))
-                .build();
-
-
-    /* String demoJson = new Gson().toJson("test");
-    @GET
-    public Response getCourses(){
-
-        ArrayList<Course> Course;
-
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity(new Gson().toJson("Course"))
-                .build();
-
-        */
-
-
-
-    }
- /*   @GET
-    @Path("{id}")
-    public Response getCourseById(@PathParam("id") int courseID){
-
-        CourseController controller = new CourseController();
-        try {
-            controller.createCourse(new Gson().fromJson(jsonCourse,Course.class));
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-        //Course foundCourse;
-
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity(new Gson().toJson("foundCourse"))
+                .entity(new Gson().toJson(courses))
                 .build();
     }
-
-
-*/
 }
 
