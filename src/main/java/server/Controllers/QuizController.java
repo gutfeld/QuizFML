@@ -3,9 +3,7 @@ package server.Controllers;
 
 import com.google.gson.Gson;
 import server.DBWrapper;
-import server.models.Course;
 import server.models.Quiz;
-import server.models.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,11 +18,12 @@ public class QuizController {
         this.gson = gson;
     }
 
-    public void createQuiz (String quiz) throws Exception {
+    public Quiz createQuiz (String quiz) throws Exception {
 
         Quiz newQuiz = new Gson().fromJson(quiz, Quiz.class);
 
-        db.createQuiz(newQuiz);
+
+        return db.createQuiz(newQuiz);
     }
 
     public ArrayList<Quiz> getQuizzes(int courseId) throws IOException, ClassNotFoundException {

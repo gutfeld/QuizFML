@@ -1,25 +1,18 @@
 package server;
 
-import com.google.gson.Gson;
 import server.Controllers.Config;
-import server.models.Quiz;
-import server.models.User;
+import server.models.*;
+import server.security.Digester;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
-import server.models.*;
-import server.security.Digester;
-
 public class DBWrapper {
     /*Når i arbejder lokalt, så lav to streger foran DEFAULT_URL og fjerne de to fra den neden under.
     * Derefter skal man erstarte DEFAULT_USERNAME til jeres lokale database navn og DEFAULT_PASSWORD til jeres lokale
     * pass.*/
-    public static final String DEFAULT_URL = "jdbc:mysql://distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com:3306/fmldb";
-    // public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fmldb";
-    private static final String DEFAULT_USERNAME = "dis2017";
-    private static final String DEFAULT_PASSWORD = "doekdis2017";
+
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
     private static Connection connection = null;
@@ -100,7 +93,7 @@ public class DBWrapper {
     }
 
 
-    public static void createUser(User createUser) {
+    public static User createUser(User createUser) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         //String PS = "INSERT INTO user (firstName, lastName, userName, password, type) VALUES (?,?,?,?,?)";
@@ -117,18 +110,20 @@ public class DBWrapper {
             preparedStatement.setLong(6, createUser.getCreatedTime());
 
             preparedStatement.executeUpdate();
+            return createUser;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             close(conn);
             close(preparedStatement);
         }
+        return null;
     }
 
 
 
 
-    public static void createQuiz(Quiz quiz) {
+    public static Quiz createQuiz(Quiz quiz) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (?,?)";
@@ -138,12 +133,15 @@ public class DBWrapper {
             preparedStatement.setString(1, quiz.getQuizTitle());
             preparedStatement.setInt(2, quiz.getCourseID());
             preparedStatement.executeUpdate();
+            return quiz;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             close(conn);
             close(preparedStatement);
         }
+        return null;
+
     }
 
     public static Boolean deleteQuiz(int quizId) throws Exception {
@@ -176,7 +174,7 @@ public class DBWrapper {
 
 
 
-    public static Boolean createQuestion(Question question) {
+    public static Question createQuestion(Question question) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         int resultSet;
@@ -192,7 +190,7 @@ public class DBWrapper {
             resultSet = preparedStatement.executeUpdate();
 
             if (resultSet == 1) {
-                return true;
+                return question;
             }
 
         } catch (Exception e) {
@@ -201,7 +199,7 @@ public class DBWrapper {
             close(conn);
             close(preparedStatement);
         }
-        return false;
+        return null;
     }
 
 

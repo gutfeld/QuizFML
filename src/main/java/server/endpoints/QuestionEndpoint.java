@@ -58,12 +58,15 @@ public class QuestionEndpoint {
     */
     @POST
     public Response createQuestion(String jsonQuestion) throws Exception {
-        Boolean isCreated = controller.createQuestion(jsonQuestion);
+        Question isCreated = controller.createQuestion(jsonQuestion);
+        String output = new Gson().toJson(isCreated);
+        String encryptedOutput = XORController.encryptDecryptXOR(output);
+        encryptedOutput = new Gson().toJson(encryptedOutput);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"questionCreated\":" + isCreated + "\"\"}")
+                .entity(encryptedOutput)
                 .build();
 
     }

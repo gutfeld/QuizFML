@@ -1,10 +1,8 @@
 package server.endpoints;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import server.Controllers.QuizController;
-import server.models.Course;
 import server.models.Quiz;
-import server.models.User;
+import server.security.XORController;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -26,24 +24,29 @@ public class QuizEndpoint {
     public Response getQuizzes(@PathParam("id") int courseId) throws IOException, ClassNotFoundException {
 
         ArrayList<Quiz> allQuizzes = controller.getQuizzes(courseId);
+        String output = new Gson().toJson(allQuizzes);
+        String encryptedOutput = XORController.encryptDecryptXOR(output);
+        encryptedOutput = new Gson().toJson(encryptedOutput);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(allQuizzes))
+                .entity(new Gson().toJson(encryptedOutput))
                 .build();
     }
 
     @POST
     public Response createQuiz(String quiz) throws Exception {
 
-        controller.createQuiz(quiz);
-
+        Quiz foundQuiz = controller.createQuiz(quiz);
+        String output = new Gson().toJson(foundQuiz);
+        String encryptedOutput = XORController.encryptDecryptXOR(output);
+        encryptedOutput = new Gson().toJson(encryptedOutput);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"quizCreated\":\"true\"}")
+                .entity(encryptedOutput)
                 .build();
     }
 
@@ -52,6 +55,7 @@ public class QuizEndpoint {
     public Response deleteQuiz(@PathParam("id") int quizID) throws Exception {
 
         Boolean deleteQuiz = controller.deleteQuiz(quizID);
+
 
         if (deleteQuiz == true) {
             return Response

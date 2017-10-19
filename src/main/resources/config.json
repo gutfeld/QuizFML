@@ -3,6 +3,7 @@
   "DATABASE_PORT" : 3306,
   "DATABASE_USERNAME" : "dis2017",
   "DATABASE_PASSWORD" : "doekdis2017",
-  "DATABASE_NAME" : "fmldb"
+  "DATABASE_NAME" : "fmldb",
+  "ENCRYPTION" : true
 
 }

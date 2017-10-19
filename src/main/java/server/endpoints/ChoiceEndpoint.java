@@ -35,7 +35,7 @@ public class ChoiceEndpoint {
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(encryptedOutput))
+                .entity(encryptedOutput)
                 .build();
 
     }

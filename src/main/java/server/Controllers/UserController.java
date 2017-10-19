@@ -5,8 +5,6 @@ import server.DBWrapper;
 import server.models.Login;
 import server.models.User;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserController {
@@ -40,13 +38,13 @@ public class UserController {
     }
 
     //public User getUser (int userId){
-    public void createUser(String user) throws Exception {
+    public User createUser(String user) throws Exception {
         User newUser = new Gson().fromJson(user, User.class);
         newUser.setCreatedTime();
         /* String hashedPassword = Digester.hashWIthSalt(u.getPassword()); Her kan der hashes og tilføjes salt til password
         u.setPassword(hashedPassword);
         */
-        db.createUser(newUser);
+        return db.createUser(newUser);
 
     }
 
