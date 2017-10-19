@@ -7,6 +7,7 @@ import server.models.Course;
 import server.models.Quiz;
 import server.models.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class QuizController {
@@ -26,29 +27,12 @@ public class QuizController {
         db.createQuiz(newQuiz);
     }
 
-   /* public ArrayList<Quiz> getQuizzes(Course course) {
-
-        ArrayList<Quiz> quizzes = db.getQuizzes(course);
-        for (int i = 0; i < quizzes.size(); i++) System.out.println(quizzes.get(i));
-        return quizzes;
+    public ArrayList<Quiz> getQuizzes(int courseId) throws IOException, ClassNotFoundException {
+        ArrayList<Quiz> allQuizzes = db.getQuizzes(courseId);
+        return allQuizzes;
     }
 
-    public Quiz findByCourseId(int courseId) {
-
-        for (Quiz quiz : this.quizzes) {
-
-            if (quiz.getCourseID() == courseId) {
-
-                return quiz;
-            }
-
-        }
-
-            return null;
-    }
-
-*/
-   public Boolean deleteQuiz (int quizId) throws Exception {
+    public Boolean deleteQuiz (int quizId) throws Exception {
        return db.deleteQuiz(quizId);
-   }
+    }
 }

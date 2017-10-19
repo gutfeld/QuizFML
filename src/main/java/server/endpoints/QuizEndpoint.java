@@ -8,6 +8,7 @@ import server.models.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -19,32 +20,17 @@ public class QuizEndpoint {
 
     QuizController controller = new QuizController();
 
- /*   @GET
-    public Response getQuizzes(){
 
-        Course course = new Course();
-
-        ArrayList<User> users = controller.getQuizzes();
-
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity(new Gson().toJson("quizzes"))
-                .build();
-    }
-
-*/
     @GET
     @Path("{id}")
-    public Response getQuizById(@PathParam("id") int quizID){
+    public Response getQuizzes(@PathParam("id") int courseId) throws IOException, ClassNotFoundException {
 
-
-        //Quiz foundQuiz;
+        ArrayList<Quiz> allQuizzes = controller.getQuizzes(courseId);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson("foundQuiz"))
+                .entity(new Gson().toJson(allQuizzes))
                 .build();
     }
 
