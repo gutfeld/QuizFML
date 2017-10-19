@@ -9,20 +9,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserController {
+
+    ArrayList<User> users;
     Gson gson;
     DBWrapper db = new DBWrapper();
 
     public UserController() {
         this.gson = gson;
     }
-public static void main(String []args) {
-    UserController uController = new UserController();
-    uController.getUsers();
-}
 
     public ArrayList<User> getUsers() {
 
         ArrayList<User> users = db.getUsers();
+        for (int i = 0; i < users.size(); i++) System.out.println(users.get(i));
         return users;
     }
 
@@ -33,30 +32,41 @@ public static void main(String []args) {
     }
 
     //public User getUser (int userId){
+    public void createUser(String user) throws Exception {
+        User newUser = new Gson().fromJson(user, User.class);
+        /* String hashedPassword = Digester.hashWIthSalt(u.getPassword()); Her kan der hashes og tilføjes salt til password
+        u.setPassword(hashedPassword);
+        */
+        db.createUser(newUser);
 
-        //User user = db.getUsers(userId);
-
-    //}
-
-    //public boolean deleteUser(int id) throws SQLException {
-
-       // DBWrapper db = new DBWrapper();
-
-        //boolean deleteUser = db.deleteUser(id);
+    }
 
 
+    /*public User findById(int id) {
 
-        //return deleteUser;
-
-   // }
-
-
-
-
-
-
-
-
+        ArrayList<User> users;
+        for (User user; this.users) {
+            if (user.getUserId() == id) {
+                return user;
+            }
+        }
+        return null;
+    } */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -17,13 +17,13 @@ public class DBWrapper {
    // public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fmldb";
     private static final String DEFAULT_USERNAME = "dis2017";
     private static final String DEFAULT_PASSWORD = "doekdis2017";
-    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
     public static Connection getConnection(String url, String username, String password) throws SQLException {
         try {
 
             try {
-                Class.forName("com.mysql.jdbc.Driver").newInstance();
+                Class.forName(JDBC_DRIVER).newInstance();
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -36,7 +36,6 @@ public class DBWrapper {
     }
 
     public static User authorizeUser (String username, String password) throws Exception {
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
         Connection connection = getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
         User userFound = null;
 
@@ -72,10 +71,17 @@ public class DBWrapper {
     public static void createUser(User createUser) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createUser.getFirstName() + ", " + createUser.getLastName() + ", " + createUser.getUsername() + ", " + createUser.getPassword() + ",1)";
+        //String PS = "INSERT INTO user (firstName, lastName, userName, password, type) VALUES (?,?,?,?,?)";
+
+        //String PS = "INSERT INTO user (firstName) VALUES (" + createUser.getFirstName()+")";
         try {
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement = conn.prepareStatement("INSERT INTO user (firstName, lastName, userName, password, type) VALUES (?,?,?,?,?)");
+            preparedStatement.setString(1, createUser.getFirstName());
+            preparedStatement.setString(2, createUser.getLastName());
+            preparedStatement.setString(3, createUser.getUsername());
+            preparedStatement.setString(4, createUser.getPassword());
+            preparedStatement.setInt(5, createUser.getType());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,21 +92,6 @@ public class DBWrapper {
     }
 
 
-    public static void createAdmin(User createAdmin) {
-        Connection conn = null;
-        PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.user (firstName, lastName, userName, password, type) VALUES (" + createAdmin.getFirstName() + ", " + createAdmin.getLastName() + ", " + createAdmin.getUsername() + ", " + createAdmin.getPassword() + ",2)";
-        try {
-            conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement(PS);
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close(conn);
-            close(preparedStatement);
-        }
-    }
 
     public static void createQuiz(Quiz quiz) {
         Connection conn = null;
@@ -221,9 +212,8 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         ArrayList<User> allUsers = new ArrayList<>();
         try {
-            //Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             conn = DBWrapper.getConnection(DEFAULT_URL, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-            preparedStatement = conn.prepareStatement("SELECT * FROM fmldb.user");
+            preparedStatement = conn.prepareStatement("SELECT * FROM user");
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
@@ -341,7 +331,7 @@ public class DBWrapper {
     public static ArrayList<Course> getUsersCourses (User user) {
         Connection conn = null;
         ResultSet rs = null;
-        String PS = "SELECT c.* FROM fmldb.user_course uc INNER JOIN fmldb.user u ON u.id = uc.user_id INNER JOIN fmldb.course c ON uc.course_id = c.id WHERE u.id =" + user.getId() ;
+        String PS = "SELECT c.* FROM fmldb.user_course uc INNER JOIN fmldb.user u ON u.id = uc.user_id INNER JOIN fmldb.course c ON uc.course_id = c.id WHERE u.id =" + user.getUserId();
         PreparedStatement preparedStatement = null;
         ArrayList<Course> courseArrayList = new ArrayList<>();
         try {
