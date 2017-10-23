@@ -40,6 +40,10 @@ public class DBWrapper {
 
         } catch (Exception e) {
             e.printStackTrace();
+
+        }finally {
+            close();
+            close(preparedStatement);
         }
         return connection;
     }
@@ -93,9 +97,10 @@ public class DBWrapper {
     }
 
 
-    public static User createUser(User createUser) {
+    public static User createUser(User createUser) throws SQLException, IOException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
         //String PS = "INSERT INTO user (firstName, lastName, userName, password, type) VALUES (?,?,?,?,?)";
 
         //String PS = "INSERT INTO user (firstName) VALUES (" + createUser.getFirstName()+")";
@@ -110,6 +115,14 @@ public class DBWrapper {
             preparedStatement.setLong(6, createUser.getCreatedTime());
 
             preparedStatement.executeUpdate();
+
+            preparedStatement = conn.prepareStatement("SELECT LAST_INSERT_ID()");
+
+            rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                createUser.setUserId(rs.getInt("id"));
+            }
             return createUser;
         } catch (Exception e) {
             
@@ -287,6 +300,7 @@ public class DBWrapper {
             while (rs.next()) {
                 User user = new User(rs.getInt("id"), rs.getString("userName") , rs.getString("password"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("type"), rs.getLong("createdTime"));
                 allUsers.add(user);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
