@@ -14,18 +14,21 @@ public class ChoiceController {
 
         Gson gson;
         DBWrapper db = new DBWrapper();
+        Log log = new Log();
 
         public ChoiceController() {
             this.gson = gson;
         }
 
         public ArrayList<Choice> getChoices(int questionID) throws IOException {
+            log.writeLog(this.getClass().getName(), this, "We are now getting choices", 0);
             ArrayList<Choice> choices = db.getChoices(questionID);
             return choices;
         }
 
 
-        public void createChoice(String choice)throws Exception{
+        public void createChoice(String choice)throws Exception {
+            log.writeLog(this.getClass().getName(), this, "We are now creating a choice", 0);
             Choice newChoice = new Gson() .fromJson(choice, Choice.class);
             db.createChoice(newChoice);
         }

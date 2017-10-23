@@ -112,7 +112,9 @@ public class DBWrapper {
             preparedStatement.executeUpdate();
             return createUser;
         } catch (Exception e) {
+            
             e.printStackTrace();
+
         } finally {
             close(conn);
             close(preparedStatement);
