@@ -59,7 +59,7 @@ public class UserEndpoint {
 
         log.writeLog(this.getClass().getName(), this, "We are now creating user", 2);
 
-        controller.createUser(user);
+
         User createUser = controller.createUser(user);
         String output = new Gson().toJson(createUser);
         String encryptedOutput = XORController.encryptDecryptXOR(output);
