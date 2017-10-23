@@ -19,14 +19,7 @@ public class DBWrapper {
 
     public static Connection getConnection() throws SQLException, IOException, ClassNotFoundException {
 
-        try {
-            Config config = new Config();
-            config.initConfig();
 
-            System.out.println();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         try {
             try {
