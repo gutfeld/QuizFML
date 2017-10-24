@@ -113,9 +113,8 @@ public class DBWrapper {
             close(preparedStatement);
         }
         return null;
+
     }
-
-
 
 
     public static Quiz createQuiz(Quiz quiz) {
@@ -280,7 +279,9 @@ public class DBWrapper {
             while (rs.next()) {
                 User user = new User(rs.getInt("id"), rs.getString("userName") , rs.getString("password"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("type"), rs.getLong("createdTime"));
                 allUsers.add(user);
-            }
+
+            } return allUsers;
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -288,7 +289,7 @@ public class DBWrapper {
             close(rs);
             close(preparedStatement);
         }
-        return allUsers;
+        return null;
     }
 
     public static ArrayList<Course> getCourses() throws IOException, ClassNotFoundException {
@@ -304,7 +305,7 @@ public class DBWrapper {
             while (rs.next()) {
                 Course course = new Course(rs.getInt(1), rs.getString(2));
                 allCourses.add(course);
-            }
+            } return allCourses;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -312,7 +313,7 @@ public class DBWrapper {
             close(rs);
             close(preparedStatement);
         }
-        return allCourses;
+        return null;
     }
 
     public static ArrayList<Quiz> getQuizzes(int courseId) throws IOException, ClassNotFoundException {
@@ -328,7 +329,7 @@ public class DBWrapper {
             while (rs.next()) {
                 Quiz quiz = new Quiz(rs.getInt(1),rs.getString(2),rs.getInt(3));
                 allQuizzes.add(quiz);
-            }
+            } return allQuizzes;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -336,7 +337,7 @@ public class DBWrapper {
             close(rs);
             close(preparedStatement);
         }
-        return allQuizzes;
+        return null;
     }
 
 
@@ -353,7 +354,7 @@ public class DBWrapper {
             while (rs.next()) {
                 Question question = new Question(rs.getInt(1),rs.getString(2),rs.getInt(3));
                 allQuestions.add(question);
-            }
+            } return allQuestions;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -361,7 +362,7 @@ public class DBWrapper {
             close(rs);
             close(preparedStatement);
         }
-        return allQuestions;
+        return null;
     }
 
 
@@ -382,7 +383,7 @@ public class DBWrapper {
             while (rs.next()) {
                 Choice choice = new Choice(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4));
                 allChoices.add(choice);
-            }
+            } return allChoices;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -390,7 +391,7 @@ public class DBWrapper {
             close(rs);
             close(preparedStatement);
         }
-        return allChoices;
+        return null;
     }
 
     // Giver alle de fag som en bestemt bruger er tilmeldt
@@ -408,7 +409,7 @@ public class DBWrapper {
             while (rs.next()) {
                 Course tempCourse = new Course(rs.getInt(1), rs.getString(2));
                 courseArrayList.add(tempCourse);
-            }
+            } return courseArrayList;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -416,7 +417,7 @@ public class DBWrapper {
             close(rs);
             close(preparedStatement);
         }
-        return courseArrayList;
+        return null;
     }
 
 
@@ -435,7 +436,7 @@ public class DBWrapper {
             while (rs.next()) {
                 User tempUser = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getLong(7));
                 userArrayList.add(tempUser);
-            }
+            } return userArrayList;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -443,7 +444,7 @@ public class DBWrapper {
             close(rs);
             close(preparedStatement);
         }
-        return userArrayList;
+        return null;
     }
 
     public static void close(Connection connection) {
