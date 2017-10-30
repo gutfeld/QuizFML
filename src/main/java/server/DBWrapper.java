@@ -94,7 +94,7 @@ public class DBWrapper {
         //String PS = "INSERT INTO user (firstName) VALUES (" + createUser.getFirstName()+")";
         try {
             conn = DBWrapper.getConnection();
-            preparedStatement = conn.prepareStatement("INSERT INTO user (firstName, lastName, userName, password, type, createdTime) VALUES (?,?,?,?,?,?)");
+            preparedStatement = conn.prepareStatement("INSERT INTO user (firstName, lastName, userName, password, type, createdTime) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, createUser.getFirstName());
             preparedStatement.setString(2, createUser.getLastName());
             preparedStatement.setString(3, createUser.getUsername());
@@ -103,16 +103,21 @@ public class DBWrapper {
             preparedStatement.setLong(6, createUser.getCreatedTime());
 
             preparedStatement.executeUpdate();
+
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+
+            if(rs.next()){
+                createUser.setUserId(rs.getInt(1));
+            }
+
             return createUser;
         } catch (Exception e) {
-            
             e.printStackTrace();
-
+            return null;
         } finally {
             close(conn);
             close(preparedStatement);
         }
-        return null;
 
     }
 
