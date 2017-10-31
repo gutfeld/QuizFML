@@ -42,15 +42,15 @@ public class UserController {
     }
 
     //public User getUser (int userId){
-    public User createUser(String user) throws Exception {
+    public User createUser(User user) throws Exception {
 
         log.writeLog(this.getClass().getName(), this, "We are now creating a user", 0);
-        User newUser = new Gson().fromJson(user, User.class);
+        User newUser =  db.createUser(user);
         newUser.setCreatedTime();
         /* String hashedPassword = Digester.hashWIthSalt(u.getPassword()); Her kan der hashes og tilføjes salt til password
         u.setPassword(hashedPassword);
         */
-        return db.createUser(newUser);
+        return newUser;
 
     }
 
