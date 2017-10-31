@@ -47,9 +47,8 @@ public class QuizEndpoint {
 
         log.writeLog(this.getClass().getName(), this, "We are creating a quiz", 0);
 
-        controller.createQuiz(quiz);
+        Quiz foundQuiz = controller.createQuiz(new Gson().fromJson(quiz, Quiz.class));
 
-        Quiz foundQuiz = controller.createQuiz(quiz);
         String output = new Gson().toJson(foundQuiz);
         String encryptedOutput = XORController.encryptDecryptXOR(output);
         encryptedOutput = new Gson().toJson(encryptedOutput);

@@ -19,14 +19,12 @@ public class QuizController {
         this.gson = gson;
     }
 
-    public Quiz createQuiz (String quiz) throws Exception {
-
+    public Quiz createQuiz (Quiz quiz) throws Exception {
         log.writeLog(this.getClass().getName(), this, "We are now creating a quiz", 0);
 
-        Quiz newQuiz = new Gson().fromJson(quiz, Quiz.class);
+        Quiz quizCreated = db.createQuiz(quiz);
 
-
-        return db.createQuiz(newQuiz);
+        return quizCreated;
     }
 
     public ArrayList<Quiz> getQuizzes(int courseId) throws IOException, ClassNotFoundException {

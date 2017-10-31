@@ -20,7 +20,6 @@ public class DBWrapper {
     public static Connection getConnection() throws SQLException, IOException, ClassNotFoundException {
 
 
-
         try {
             try {
                 Class.forName(JDBC_DRIVER).newInstance();
@@ -106,7 +105,7 @@ public class DBWrapper {
 
             ResultSet rs = preparedStatement.getGeneratedKeys();
 
-            if(rs.next()){
+            if (rs.next()) {
                 createUser.setUserId(rs.getInt(1));
             }
 
@@ -122,26 +121,34 @@ public class DBWrapper {
     }
 
 
-    public static Quiz createQuiz(Quiz quiz) {
+    public static Quiz createQuiz(Quiz quiz) throws SQLException, IOException, ClassNotFoundException {
         Connection conn = null;
-        PreparedStatement preparedStatement = null;
-        String PS = "INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (?,?)";
+        conn = DBWrapper.getConnection();
         try {
-            conn = DBWrapper.getConnection();
-            preparedStatement = conn.prepareStatement(PS);
-            preparedStatement.setString(1, quiz.getQuizTitle());
-            preparedStatement.setInt(2, quiz.getCourseID());
-            preparedStatement.executeUpdate();
-            return quiz;
-        } catch (Exception e) {
+            PreparedStatement createQuiz = conn.prepareStatement("INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+            createQuiz.setString(1, quiz.getQuizTitle());
+            createQuiz.setInt(2, quiz.getCourseID());
+
+            int rowsAffected = createQuiz.executeUpdate();
+            if (rowsAffected == 1) {
+                ResultSet rs = createQuiz.getGeneratedKeys();
+                if (rs != null && rs.next()) {
+                    int autoIncrementedId = rs.getInt(1);
+                    quiz.setQuizID(autoIncrementedId);
+                } else {
+                    quiz = null;
+                }
+                return quiz;
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
+        }finally {
             close(conn);
-            close(preparedStatement);
+
         }
         return null;
-
     }
+
 
     public static Boolean deleteQuiz(int quizId) throws Exception {
         Connection conn = null;
@@ -165,12 +172,6 @@ public class DBWrapper {
         }
         return false;
     }
-
-
-
-
-
-
 
 
     public static Question createQuestion(Question question) {
@@ -207,7 +208,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "DELETE FROM fmldb.question WHERE fmldb.question.id = " + question.getQuestionId();
         try {
-            conn = DBWrapper.getConnection( );
+            conn = DBWrapper.getConnection();
             conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -224,7 +225,7 @@ public class DBWrapper {
         //String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (" + choice.getChoiceTitle() + ", " + choice.isAnswer() + ", " + choice.getQuestionId() + ")";
         String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (?,?,?)";
         try {
-            conn = DBWrapper.getConnection( );
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
             preparedStatement.setString(1, choice.getChoiceTitle());
             preparedStatement.setInt(2, choice.isAnswer());
@@ -243,7 +244,7 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         String PS = "DELETE FROM fmldb.choice WHERE fmldb.choice.id = " + choice.getChoiceId();
         try {
-            conn = DBWrapper.getConnection( );
+            conn = DBWrapper.getConnection();
             conn.prepareStatement(PS);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -282,10 +283,11 @@ public class DBWrapper {
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                User user = new User(rs.getInt("id"), rs.getString("userName") , rs.getString("password"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("type"), rs.getLong("createdTime"));
+                User user = new User(rs.getInt("id"), rs.getString("userName"), rs.getString("password"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("type"), rs.getLong("createdTime"));
                 allUsers.add(user);
 
-            } return allUsers;
+            }
+            return allUsers;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -303,14 +305,15 @@ public class DBWrapper {
         PreparedStatement preparedStatement = null;
         ArrayList<Course> allCourses = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection( );
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement("SELECT * FROM fmldb.course");
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
                 Course course = new Course(rs.getInt(1), rs.getString(2));
                 allCourses.add(course);
-            } return allCourses;
+            }
+            return allCourses;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -332,9 +335,10 @@ public class DBWrapper {
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                Quiz quiz = new Quiz(rs.getInt(1),rs.getString(2),rs.getInt(3));
+                Quiz quiz = new Quiz(rs.getInt(1), rs.getString(2), rs.getInt(3));
                 allQuizzes.add(quiz);
-            } return allQuizzes;
+            }
+            return allQuizzes;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -346,7 +350,7 @@ public class DBWrapper {
     }
 
 
-    public static ArrayList<Question> getQuestions( int quizId) throws IOException, ClassNotFoundException {
+    public static ArrayList<Question> getQuestions(int quizId) throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -357,9 +361,10 @@ public class DBWrapper {
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                Question question = new Question(rs.getInt(1),rs.getString(2),rs.getInt(3));
+                Question question = new Question(rs.getInt(1), rs.getString(2), rs.getInt(3));
                 allQuestions.add(question);
-            } return allQuestions;
+            }
+            return allQuestions;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -371,8 +376,6 @@ public class DBWrapper {
     }
 
 
-
-
     public static ArrayList<Choice> getChoices(int questionID) throws IOException {
         Connection conn = null;
         ResultSet rs = null;
@@ -380,7 +383,7 @@ public class DBWrapper {
         ArrayList<Choice> allChoices = new ArrayList<>();
         try {
 
-            conn = DBWrapper.getConnection( );
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement("SELECT c.* FROM fmldb.choice c INNER JOIN fmldb.question q ON c.question_id = q.id WHERE c.question_id =" + questionID + ";");
 
             rs = preparedStatement.executeQuery();
@@ -388,7 +391,8 @@ public class DBWrapper {
             while (rs.next()) {
                 Choice choice = new Choice(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4));
                 allChoices.add(choice);
-            } return allChoices;
+            }
+            return allChoices;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -400,21 +404,22 @@ public class DBWrapper {
     }
 
     // Giver alle de fag som en bestemt bruger er tilmeldt
-    public static ArrayList<Course> getUsersCourses (User user) throws IOException, ClassNotFoundException {
+    public static ArrayList<Course> getUsersCourses(User user) throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
         String PS = "SELECT c.* FROM fmldb.user_course uc INNER JOIN fmldb.user u ON u.id = uc.user_id INNER JOIN fmldb.course c ON uc.course_id = c.id WHERE u.id =" + user.getUserId();
         PreparedStatement preparedStatement = null;
         ArrayList<Course> courseArrayList = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection( );
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
                 Course tempCourse = new Course(rs.getInt(1), rs.getString(2));
                 courseArrayList.add(tempCourse);
-            } return courseArrayList;
+            }
+            return courseArrayList;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -427,21 +432,22 @@ public class DBWrapper {
 
 
     // Giver alle brugere som er tilmeldt et bestemt fag s
-    public static ArrayList<User> getCoursesUsers (Course course) throws IOException, ClassNotFoundException {
+    public static ArrayList<User> getCoursesUsers(Course course) throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
         String PS = "SELECT u.* FROM fmldb.user_course uc INNER JOIN fmldb.course c ON uc.course_id = c.id INNER JOIN fmldb.user u ON uc.user_id = u.id WHERE c.id =" + course.getCourseID();
         PreparedStatement preparedStatement = null;
         ArrayList<User> userArrayList = new ArrayList<>();
         try {
-            conn = DBWrapper.getConnection( );
+            conn = DBWrapper.getConnection();
             preparedStatement = conn.prepareStatement(PS);
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
                 User tempUser = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getLong(7));
                 userArrayList.add(tempUser);
-            } return userArrayList;
+            }
+            return userArrayList;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
