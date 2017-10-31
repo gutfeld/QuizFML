@@ -66,7 +66,7 @@ public class QuestionEndpoint {
 
         log.writeLog(this.getClass().getName(), this, "We are now creating a question", 2);
 
-        Question isCreated = controller.createQuestion(jsonQuestion);
+        Question isCreated = controller.createQuestion(new Gson().fromJson(jsonQuestion, Question.class));
         String output = new Gson().toJson(isCreated);
         String encryptedOutput = XORController.encryptDecryptXOR(output);
         encryptedOutput = new Gson().toJson(encryptedOutput);

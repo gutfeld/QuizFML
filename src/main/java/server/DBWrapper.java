@@ -174,23 +174,30 @@ public class DBWrapper {
     }
 
 
-    public static Question createQuestion(Question question) {
-        Connection conn = null;
-        PreparedStatement preparedStatement = null;
-        int resultSet;
+    public static Question createQuestion(Question question) throws SQLException, IOException, ClassNotFoundException {
+        Connection conn = DBWrapper.getConnection();
+
+
 
         try {
-            conn = DBWrapper.getConnection();
+
             //preparedStatement = conn.prepareStatement("INSERT INTO question (questionTitle, quiz_id) VALUES (?, ?)");
-            preparedStatement = conn.prepareStatement("INSERT INTO fmldb.question (questionTitle, quiz_id)\n" +
-                    "VALUES (?, ?);");
+            PreparedStatement createQuestion = conn.prepareStatement("INSERT INTO fmldb.question (questionTitle, quiz_id)\n" +
+                    "VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
             System.out.println("title: " + question.getQuestionTitle() + " quizId: " + question.getQuizID());
-            preparedStatement.setString(1, question.getQuestionTitle());
-            preparedStatement.setInt(2, question.getQuizID());
+            createQuestion.setString(1, question.getQuestionTitle());
+            createQuestion.setInt(2, question.getQuizID());
 
 
-            int rowsAffected = preparedStatement.executeUpdate();
+            int rowsAffected = createQuestion.executeUpdate();
             if (rowsAffected == 1) {
+                ResultSet rs = createQuestion.getGeneratedKeys();
+                if(rs != null && rs.next()){
+                    int id = rs.getInt(1);
+                    question.setQuestionId(id);
+                } else {
+                    question = null;
+                }
                 return question;
             }
 
@@ -198,7 +205,7 @@ public class DBWrapper {
             e.printStackTrace();
         } finally {
             close(conn);
-            close(preparedStatement);
+
         }
         return null;
     }

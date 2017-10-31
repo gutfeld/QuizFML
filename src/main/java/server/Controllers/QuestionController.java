@@ -30,9 +30,9 @@ public class QuestionController {
 
     }
 
-    public Question createQuestion(String jsonQuestion) throws Exception {
-        Question newQuestion = new Gson().fromJson(jsonQuestion, Question.class);
-        Question isCreated = db.createQuestion(newQuestion);
+    public Question createQuestion(Question question) throws Exception {
+
+        Question isCreated = db.createQuestion(question);
         return isCreated;
     }
 }
