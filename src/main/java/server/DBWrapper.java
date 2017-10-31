@@ -174,6 +174,9 @@ public class DBWrapper {
     }
 
 
+
+
+
     public static Question createQuestion(Question question) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
@@ -187,9 +190,10 @@ public class DBWrapper {
             System.out.println("title: " + question.getQuestionTitle() + " quizId: " + question.getQuizID());
             preparedStatement.setString(1, question.getQuestionTitle());
             preparedStatement.setInt(2, question.getQuizID());
-            resultSet = preparedStatement.executeUpdate();
 
-            if (resultSet == 1) {
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected == 1) {
                 return question;
             }
 
