@@ -49,9 +49,9 @@ public class ChoiceEndpoint {
     @POST
     public Response createChoice(String jsonChoice) throws Exception {
         log.writeLog(this.getClass().getName(), this, "We are now creating choice", 2);
-        cController.createChoice(jsonChoice);
-        Choice newChoice = new Gson().fromJson(jsonChoice, Choice.class);
-        String output = new Gson().toJson(newChoice);
+        Choice createdChoice = cController.createChoice(new Gson().fromJson(jsonChoice, Choice.class));
+
+        String output = new Gson().toJson(createdChoice);
         String encryptedOutput = XORController.encryptDecryptXOR(output);
         encryptedOutput = new Gson().toJson(encryptedOutput);
 

@@ -27,10 +27,11 @@ public class ChoiceController {
         }
 
 
-        public void createChoice(String choice)throws Exception {
+        public Choice createChoice(Choice choice) throws Exception {
             log.writeLog(this.getClass().getName(), this, "We are now creating a choice", 0);
-            Choice newChoice = new Gson() .fromJson(choice, Choice.class);
-            db.createChoice(newChoice);
+            Choice createdChoice = db.createChoice(choice);
+
+            return createdChoice;
         }
 
 

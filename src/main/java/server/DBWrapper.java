@@ -142,7 +142,7 @@ public class DBWrapper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             close(conn);
 
         }
@@ -172,9 +172,6 @@ public class DBWrapper {
         }
         return false;
     }
-
-
-
 
 
     public static Question createQuestion(Question question) {
@@ -223,25 +220,34 @@ public class DBWrapper {
         }
     }
 
-    public static void createChoice(Choice choice) {
-        Connection conn = null;
-        PreparedStatement preparedStatement = null;
-        //String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (" + choice.getChoiceTitle() + ", " + choice.isAnswer() + ", " + choice.getQuestionId() + ")";
-        String PS = "INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (?,?,?)";
+    public Choice createChoice(Choice choice) throws IllegalArgumentException, SQLException, IOException, ClassNotFoundException {
+             Connection conn = DBWrapper.getConnection();
+
         try {
-            conn = DBWrapper.getConnection();
-            preparedStatement = conn.prepareStatement(PS);
-            preparedStatement.setString(1, choice.getChoiceTitle());
-            preparedStatement.setInt(2, choice.isAnswer());
-            preparedStatement.setInt(3, choice.getQuestionId());
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
+            PreparedStatement createChoice = conn.prepareStatement("INSERT INTO fmldb.choice (choiceTitle, answer, question_id) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            createChoice.setString(1, choice.getChoiceTitle());
+            createChoice.setInt(2, choice.isAnswer());
+            createChoice.setInt(3, choice.getQuestionId());
+
+            int rowsAffected = createChoice.executeUpdate();
+            if(rowsAffected == 1) {
+                ResultSet rs = createChoice.getGeneratedKeys();
+                if(rs != null && rs.next()) {
+                    int id = rs.getInt(1);
+                    choice.setChoiceId(id);
+                } else {
+                    choice = null;
+                }
+                return choice;
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
             close(conn);
-            close(preparedStatement);
         }
+        return null;
     }
+
+
 
     public static void deleteChoice(Choice choice) {
         Connection conn = null;
