@@ -3,6 +3,7 @@ package server.Controllers;
 import com.google.gson.Gson;
 import server.DBWrapper;
 import server.models.Course;
+import server.utility.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;

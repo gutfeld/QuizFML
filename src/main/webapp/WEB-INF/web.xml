@@ -17,7 +17,7 @@
     </servlet-mapping>
     <listener>
         <listener-class>
-            server.Controllers.Globals
+            server.utility.Globals
         </listener-class>
     </listener>
 </web-app>

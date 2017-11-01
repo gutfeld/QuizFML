@@ -4,9 +4,8 @@ import com.google.gson.Gson;
 import server.DBWrapper;
 import server.models.Login;
 import server.models.User;
+import server.utility.Log;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserController {

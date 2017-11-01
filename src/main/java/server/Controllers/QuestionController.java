@@ -1,13 +1,10 @@
 package server.Controllers;
 import com.google.gson.Gson;
 import server.DBWrapper;
-import server.endpoints.QuestionEndpoint;
-import server.endpoints.QuizEndpoint;
 import server.models.Question;
-import server.models.Quiz;
+import server.utility.Log;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class QuestionController {

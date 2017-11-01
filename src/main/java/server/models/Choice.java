@@ -1,6 +1,6 @@
 package server.models;
 
-import server.Controllers.Log;
+import server.utility.Log;
 
 public class Choice {
     Log log = new Log();

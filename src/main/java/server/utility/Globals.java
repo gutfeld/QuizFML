@@ -1,4 +1,7 @@
-package server.Controllers;
+package server.utility;
+
+import server.Controllers.Config;
+import server.utility.Log;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

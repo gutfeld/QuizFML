@@ -4,6 +4,7 @@ package server.Controllers;
 import com.google.gson.Gson;
 import server.DBWrapper;
 import server.models.Quiz;
+import server.utility.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;

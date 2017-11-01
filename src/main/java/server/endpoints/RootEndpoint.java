@@ -1,9 +1,8 @@
 package server.endpoints;
 
-import server.Controllers.Log;
+import server.utility.Log;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 public class RootEndpoint {

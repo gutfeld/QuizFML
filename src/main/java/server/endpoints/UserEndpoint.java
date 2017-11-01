@@ -1,8 +1,7 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
-import server.Controllers.Log;
-import server.DBWrapper;
+import server.utility.Log;
 import server.Controllers.UserController;
 import server.models.User;
 import server.security.XORController;

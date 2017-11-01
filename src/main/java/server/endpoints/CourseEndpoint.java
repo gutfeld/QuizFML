@@ -2,17 +2,13 @@ package server.endpoints;
 import com.google.gson.Gson;
 import server.Controllers.CourseController;
 import server.security.XORController;
-import server.Controllers.Log;
+import server.utility.Log;
 import server.models.Course;
-import server.models.User;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 

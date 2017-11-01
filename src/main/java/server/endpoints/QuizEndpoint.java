@@ -1,12 +1,9 @@
 package server.endpoints;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import server.Controllers.QuizController;
-import server.models.Course;
 import server.models.Quiz;
 import server.security.XORController;
-import server.models.User;
-import server.Controllers.Log;
+import server.utility.Log;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;

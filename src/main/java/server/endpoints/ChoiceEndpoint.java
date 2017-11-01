@@ -3,7 +3,7 @@ package server.endpoints;
 
 import com.google.gson.Gson;
 import server.Controllers.ChoiceController;
-import server.Controllers.Log;
+import server.utility.Log;
 import server.models.Choice;
 import server.security.XORController;
 

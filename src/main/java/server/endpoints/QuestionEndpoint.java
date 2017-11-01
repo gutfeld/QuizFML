@@ -1,9 +1,7 @@
 package server.endpoints;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import server.Controllers.Log;
+import server.utility.Log;
 import server.Controllers.QuestionController;
-import server.DBWrapper;
 import server.models.Question;
 import server.security.XORController;
 
@@ -13,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 

@@ -3,8 +3,7 @@ package server.Controllers;
 import com.google.gson.Gson;
 import server.DBWrapper;
 import server.models.Choice;
-import server.endpoints.ChoiceEndpoint;
-import server.models.Question;
+import server.utility.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;

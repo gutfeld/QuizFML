@@ -1,6 +1,6 @@
 package server.security;
 
-import server.Controllers.Globals;
+import server.utility.Globals;
 
 public class XORController {
 
