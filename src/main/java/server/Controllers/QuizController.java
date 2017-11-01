@@ -20,6 +20,7 @@ public class QuizController {
         this.gson = gson;
     }
 
+
     public Quiz createQuiz (Quiz quiz) throws Exception {
         log.writeLog(this.getClass().getName(), this, "We are now creating a quiz", 0);
 

@@ -1,8 +1,8 @@
 package server.models;
 
 public class Login {
-    String username;
-    String password;
+    private String username;
+    private String password;
 
     public Login(String username, String password) {
         this.username = username;

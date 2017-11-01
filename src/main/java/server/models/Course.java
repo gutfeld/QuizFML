@@ -1,8 +1,9 @@
 package server.models;
 
 public class Course {
-    int courseID;
-    String courseTitel;
+
+    private int courseID;
+    private String courseTitel;
 
     public int getCourseID() {
         return courseID;

@@ -2,9 +2,9 @@ package server.models;
 
 public class Quiz {
 
-    int quizID;
-    String quizTitle;
-    int courseID;
+    private int quizID;
+    private String quizTitle;
+    private int courseID;
 
     // constructor
     public Quiz (int quizID, String quizTitle, int courseID){
