@@ -18,6 +18,13 @@ public class CourseEndpoint {
     Log log = new Log();
 
     String demoJson = new Gson().toJson("Courses");
+
+    /**
+     *
+     * @return henter alle courses
+     *
+     */
+
     @GET
     public Response getCourses() throws IOException, ClassNotFoundException {
         CourseController courseController = new  CourseController();

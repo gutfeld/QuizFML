@@ -12,6 +12,11 @@ public class CourseController {
     Gson gson;
     Log log = new Log();
 
+    /**
+     *
+     * @return c
+     * metode for at loade courses
+     */
 
     public ArrayList<Course> getCourses() throws IOException, ClassNotFoundException {
 
