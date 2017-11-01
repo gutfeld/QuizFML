@@ -24,7 +24,12 @@ public class ChoiceEndpoint {
     ChoiceController cController = new ChoiceController();
 
 
-
+    /**
+     * @param questionID
+     * @return Denne Metode laver et objekt GetChoiceBYID ved at køre questionID. Derefter laves outputtet om.
+     * Til Json fra Gson og dette XOR-krypteres. Derefter returneres outputet.
+     * @throws IOException
+     */
 
 
     @GET
@@ -45,7 +50,12 @@ public class ChoiceEndpoint {
                 .build();
     }
 
-
+    /**
+     * @param jsonChoice
+     * @return Metoden indenholder en arraylist med alle choice. Ved at hente choisecontroller ved choiseID.
+     *  Derefter krypteres outputtet og ændres fra Gson til Json. Tilsidst retuneres dette output.
+     *  @throws Exception
+     */
     @POST
     public Response createChoice(String jsonChoice) throws Exception {
         log.writeLog(this.getClass().getName(), this, "We are now creating choice", 2);
