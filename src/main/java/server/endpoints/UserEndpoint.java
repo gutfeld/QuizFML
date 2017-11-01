@@ -22,6 +22,10 @@ public class UserEndpoint {
     Log log = new Log();
     UserController controller = new UserController();
 
+    /**
+     * Metode der bruges til at hente alle users
+     * @return Alle users
+     */
 
     @GET
     public Response getUsers() {
@@ -37,6 +41,12 @@ public class UserEndpoint {
 
     }
 
+    /**
+     * Metode der bruges til at hente User ud fra id
+     * @param UserId
+     * @return Den specifikke user
+     */
+
     @GET
     @Path("{id}")
 
@@ -44,7 +54,7 @@ public class UserEndpoint {
 
         log.writeLog(this.getClass().getName(), this, "We are now getting user by Id", 2);
 
-        // User foundUser
+
 
         return Response
             .status(200)
@@ -52,6 +62,13 @@ public class UserEndpoint {
             .entity(new Gson().toJson("foundUser"))
             .build();
     }
+
+    /**
+     * Laver en ny User i databasen
+     * @param user
+     * @return True or False
+     * @throws Exception
+     */
 
     @POST
     public Response createUser(String user) throws Exception {
@@ -76,7 +93,12 @@ public class UserEndpoint {
 
     }
 
-
+    /**
+     * Tjekker om useren findes i systemet
+     * @param data
+     * @return True  or False
+     * @throws Exception
+     */
 
     @Path("/login")
     @POST

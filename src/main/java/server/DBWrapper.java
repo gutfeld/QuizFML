@@ -211,7 +211,7 @@ public class DBWrapper {
     }
 
 
-    public static void deleteQuestion(Question question) {
+     public static void deleteQuestion(Question question) {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         String PS = "DELETE FROM fmldb.question WHERE fmldb.question.id = " + question.getQuestionId();
@@ -226,6 +226,35 @@ public class DBWrapper {
             close(preparedStatement);
         }
     }
+    /*public static Boolean deleteQuiz(int quizId) throws Exception {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "DELETE FROM fmldb.quiz WHERE fmldb.quiz.id = ?";
+        int check = 0;
+        try {
+            conn = DBWrapper.getConnection();
+            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.setInt(1, quizId);
+            check = preparedStatement.executeUpdate();
+
+            if (check == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+        return false;
+    }*/
+
+
+
+
+
+
+
 
     public Choice createChoice(Choice choice) throws IllegalArgumentException, SQLException, IOException, ClassNotFoundException {
              Connection conn = DBWrapper.getConnection();
