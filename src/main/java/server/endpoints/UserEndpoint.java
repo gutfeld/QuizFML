@@ -91,10 +91,10 @@ public class UserEndpoint {
         if (u != null) {
             log.writeLog(this.getClass().getName(), this, "User logged in", 2);
 
-            return Response.status(200).entity(new Gson().toJson(encryptedOutput)).build();
+            return Response.status(200).type("application/json").entity(new Gson().toJson(encryptedOutput)).build();
         } else {
             log.writeLog(this.getClass().getName(), this, "User not logged in because of failure", 1);
-            return Response.status(400).entity("failure!").build();
+            return Response.status(400).type("text/plain").entity("failure!").build();
         }
 
     }
