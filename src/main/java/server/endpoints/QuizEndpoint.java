@@ -20,7 +20,15 @@ public class QuizEndpoint {
 
     QuizController controller = new QuizController();
 
-
+    /**
+     *
+     * @param courseId
+     * @return output (allQuizzes)
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * Denne metode opretter en arrayList der indeholder alle quizzer, ved at hente quizzes via QuizController på CourseId
+     * Derefter krypteres outputtet og ændres fra Gson til Json. Derefter returneres dette outout (alle quizzer)
+     */
     @GET
     @Path("{id}")
     public Response getQuizzes(@PathParam("id") int courseId) throws IOException, ClassNotFoundException {
@@ -40,6 +48,14 @@ public class QuizEndpoint {
                 .build();
     }
 
+    /**
+     *
+     * @param quiz
+     * @return EncryptedOutput (foundQuiz)
+     * @throws Exception
+     * Denne metode laver et objekt (foundQuiz) ved at køre QuizController med stringen quiz. Derefter laves outputtet om
+     * til Json fra Gson, og dette XOR-krypteres. Derefter returneres outputtet.
+     */
     @POST
     public Response createQuiz(String quiz) throws Exception {
 
@@ -57,6 +73,15 @@ public class QuizEndpoint {
                 .entity(encryptedOutput)
                 .build();
     }
+
+    /**
+     *
+     * @param quizID
+     * @return enten en besked om at quizzen er slettet korrekt, eller ikke er slettet korrekt.
+     * @throws Exception
+     * Denne metode laver en Boolean og kører QuizController.deleteQuiz med parametret quizID. Hvis Boolean returnerer 'true'
+     * er quizzen slettet. Ellers er quizzen ikke slettet.
+     */
 
     @DELETE
     @Path("{id}")
