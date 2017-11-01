@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 
 
-@Path("/Choice")
+@Path("/choice")
 public class ChoiceEndpoint {
 
     Log log = new Log();

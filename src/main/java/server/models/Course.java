@@ -2,15 +2,15 @@ package server.models;
 
 public class Course {
 
-    private int courseID;
+    private int courseId;
     private String courseTitel;
 
-    public int getCourseID() {
-        return courseID;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setCourseID(int courseID) {
-        this.courseID = courseID;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     public String getCourseTitel() {
@@ -21,8 +21,8 @@ public class Course {
         this.courseTitel = courseTitel;
     }
 
-    public Course(int courseID, String courseTitel) {
-        this.courseID = courseID;
+    public Course(int courseId, String courseTitel) {
+        this.courseId = courseId;
         this.courseTitel = courseTitel;
     }
 

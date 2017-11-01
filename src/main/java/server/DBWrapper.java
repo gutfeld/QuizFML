@@ -159,14 +159,14 @@ public class DBWrapper {
         try {
             PreparedStatement createQuiz = conn.prepareStatement("INSERT INTO fmldb.quiz (quizTitle, course_id) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
             createQuiz.setString(1, quiz.getQuizTitle());
-            createQuiz.setInt(2, quiz.getCourseID());
+            createQuiz.setInt(2, quiz.getCourseId());
 
             int rowsAffected = createQuiz.executeUpdate();
             if (rowsAffected == 1) {
                 ResultSet rs = createQuiz.getGeneratedKeys();
                 if (rs != null && rs.next()) {
                     int autoIncrementedId = rs.getInt(1);
-                    quiz.setQuizID(autoIncrementedId);
+                    quiz.setQuizId(autoIncrementedId);
                 } else {
                     quiz = null;
                 }
@@ -233,9 +233,9 @@ public class DBWrapper {
             //preparedStatement = conn.prepareStatement("INSERT INTO question (questionTitle, quiz_id) VALUES (?, ?)");
             PreparedStatement createQuestion = conn.prepareStatement("INSERT INTO fmldb.question (questionTitle, quiz_id)\n" +
                     "VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-            System.out.println("title: " + question.getQuestionTitle() + " quizId: " + question.getQuizID());
+            System.out.println("title: " + question.getQuestionTitle() + " quizId: " + question.getQuizId());
             createQuestion.setString(1, question.getQuestionTitle());
-            createQuestion.setInt(2, question.getQuizID());
+            createQuestion.setInt(2, question.getQuizId());
 
 
             int rowsAffected = createQuestion.executeUpdate();

@@ -2,43 +2,43 @@ package server.models;
 
 public class Quiz {
 
-    private int quizID;
+    private int quizId;
     private String quizTitle;
-    private int courseID;
+    private int courseId;
 
     // constructor
-    public Quiz (int quizID, String quizTitle, int courseID){
-        this.quizID = quizID;
+    public Quiz (int quizId, String quizTitle, int courseId){
+        this.quizId = quizId;
         this.quizTitle = quizTitle;
-        this.courseID = courseID;
+        this.courseId = courseId;
     }
 
     // tom constructor
     public Quiz() {}
 
     //get metoder
-    public int getQuizID(){
-        return quizID;
+    public int getQuizId(){
+        return quizId;
     }
 
     public String getQuizTitle(){
         return quizTitle;
     }
 
-    public int getCourseID(){
-        return courseID;
+    public int getCourseId(){
+        return courseId;
     }
 
 
     //set metoder
-    public void setQuizID(int quizID){
-        this.quizID=quizID;
+    public void setQuizId(int quizId){
+        this.quizId = quizId;
     }
 
     public void setQuizTitle (String quizTitle){
         this.quizTitle=quizTitle;
     }
-    public void setCourseID(int courseID){
-        this.courseID=courseID;
+    public void setCourseId(int courseId){
+        this.courseId = courseId;
     }
 }

@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-@Path("/Courses")
+@Path("/courses")
 public class CourseEndpoint {
 
     Log log = new Log();

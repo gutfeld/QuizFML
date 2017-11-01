@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-@Path("/Question")
+@Path("/question")
 public class QuestionEndpoint {
     Log log = new Log();
     QuestionController controller = new QuestionController();
