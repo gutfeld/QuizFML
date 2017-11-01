@@ -19,6 +19,13 @@ public class QuestionEndpoint {
     Log log = new Log();
     QuestionController controller = new QuestionController();
 
+    /**
+     *
+     * @param quizId
+     * @return Response
+     * Henter alle spørgsmål efter quizId
+     */
+
     @GET
     @Path ("{quizId}")
     public Response getQuestions(@PathParam("quizId") int quizId) throws IOException, ClassNotFoundException {
@@ -29,12 +36,7 @@ public class QuestionEndpoint {
         encryptedOutput = new Gson().toJson(encryptedOutput);
 
 
-//
-            /*try {
-                controller.getQuestions(new Gson().fromJson(jsonQuestion, Question.class));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }*/
+
 
 
         return Response
@@ -44,20 +46,14 @@ public class QuestionEndpoint {
                 .build();
 
     }
-    /*
-        @GET
-        @Path("{questionId}")
-        public Response getQuestionById(@PathParam("questionId") int questionId) {
 
+    /**
+     *
+     * @param jsonQuestion
+     * @return Response
+     * Metode til at oprette et spørgsmål i databasen ved at få en json streng af et spørgsmål
+     */
 
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity(new Gson().toJson("foundQuestion"))
-                    .build();
-
-        }
-    */
     @POST
     public Response createQuestion(String jsonQuestion) throws Exception {
 
