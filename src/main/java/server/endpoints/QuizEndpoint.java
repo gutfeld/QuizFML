@@ -29,13 +29,14 @@ public class QuizEndpoint {
 
         ArrayList<Quiz> allQuizzes = controller.getQuizzes(courseId);
         String output = new Gson().toJson(allQuizzes);
-        String encryptedOutput = XORController.encryptDecryptXOR(output);
-        encryptedOutput = new Gson().toJson(encryptedOutput);
+
+
+        output = XORController.encryptDecryptXOR(output);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(encryptedOutput))
+                .entity(new Gson().toJson(output))
                 .build();
     }
 
