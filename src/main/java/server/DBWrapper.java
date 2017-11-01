@@ -9,13 +9,19 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DBWrapper {
-    /*Når i arbejder lokalt, så lav to streger foran DEFAULT_URL og fjerne de to fra den neden under.
-    * Derefter skal man erstarte DEFAULT_USERNAME til jeres lokale database navn og DEFAULT_PASSWORD til jeres lokale
-    * pass.*/
+
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
     private static Connection connection = null;
+
+    /**
+     * Her oprettes forbindelsen til vores amazon database.
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
 
     public static Connection getConnection() throws SQLException, IOException, ClassNotFoundException {
 
@@ -36,7 +42,16 @@ public class DBWrapper {
         return connection;
     }
 
-
+    /**
+     * Denne metode bruges når vi logger ind.
+     * Den tager to String objekter, og undersøger om disse stemmer overens med data fra vores database.
+     * Til sidst returnere den et user objekt - hvis dette eksisterer, som matcher de to strings.
+     *
+     * @param username
+     * @param password
+     * @return userFound_Final
+     * @throws Exception
+     */
     public static User authorizeUser(String username, String password) throws Exception {
         Connection connection = getConnection();
         User userFound = null;
@@ -84,6 +99,13 @@ public class DBWrapper {
         return userFound_final;
     }
 
+    /**
+     * Denne metode opretter en ny bruger i vores database.
+     * Den modtager et User objekt når det bliver kaldt, og dette User objekt bliver derefter
+     * oprettet og gemt i vores database. Hvis brugeren bliver oprettet uden fejl, retunerer metoden objektet.
+     * @param createUser
+     * @return createUser
+     */
 
     public static User createUser(User createUser) {
         Connection conn = null;
@@ -120,6 +142,16 @@ public class DBWrapper {
 
     }
 
+    /**Denne metode opretter en ny quiz i vores database.
+     * Den modtager et Quiz objekt når det bliver kaldt, og dette Quiz objekt bliver derefter
+     * oprettet og gemt i vores database. Hvis quiz'en bliver oprettet uden fejl, retunerer metoden objektet.
+     * @param quiz
+     * @return quiz
+     * @throws SQLException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+
 
     public static Quiz createQuiz(Quiz quiz) throws SQLException, IOException, ClassNotFoundException {
         Connection conn = null;
@@ -149,6 +181,15 @@ public class DBWrapper {
         return null;
     }
 
+    /**
+     * Denne metode bruges når Quiz objekter skal slettes fra vores database.
+     * Metoden er boolean, da den skal returnere true, hvis quiz'en bliver slettet
+     * og false hvis det ikke lykkedes. Metoden skal indholde en int, som repræsenterer den
+     * respektive quiz'. Denne int bruges til at finde den quiz der skal slettes i databasen.
+     * @param quizId
+     * @return true or false
+     * @throws Exception
+     */
 
     public static Boolean deleteQuiz(int quizId) throws Exception {
         Connection conn = null;
@@ -173,7 +214,15 @@ public class DBWrapper {
         return false;
     }
 
-
+    /**Denne metode opretter et nyt Question i vores database.
+     * Den modtager et Question objekt når det bliver kaldt, og dette Question objekt bliver derefter
+     * oprettet og gemt i vores database. Hvis Question'et bliver oprettet uden fejl, retunerer metoden objektet.
+     * @param question
+     * @return question
+     * @throws SQLException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static Question createQuestion(Question question) throws SQLException, IOException, ClassNotFoundException {
         Connection conn = DBWrapper.getConnection();
 
@@ -211,51 +260,20 @@ public class DBWrapper {
     }
 
 
-     public static void deleteQuestion(Question question) {
-        Connection conn = null;
-        PreparedStatement preparedStatement = null;
-        String PS = "DELETE FROM fmldb.question WHERE fmldb.question.id = " + question.getQuestionId();
-        try {
-            conn = DBWrapper.getConnection();
-            conn.prepareStatement(PS);
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close(conn);
-            close(preparedStatement);
-        }
-    }
-    /*public static Boolean deleteQuiz(int quizId) throws Exception {
-        Connection conn = null;
-        PreparedStatement preparedStatement = null;
-        String PS = "DELETE FROM fmldb.quiz WHERE fmldb.quiz.id = ?";
-        int check = 0;
-        try {
-            conn = DBWrapper.getConnection();
-            preparedStatement = conn.prepareStatement(PS);
-            preparedStatement.setInt(1, quizId);
-            check = preparedStatement.executeUpdate();
-
-            if (check == 1) {
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close(conn);
-            close(preparedStatement);
-        }
-        return false;
-    }*/
 
 
 
-
-
-
-
-
+    /**
+     * Denne metode opretter et nyt Choice i vores database.
+     * Den modtager et Choice objekt når det bliver kaldt, og dette Choice objekt bliver derefter
+     * oprettet og gemt i vores database. Hvis Choice'et bliver oprettet uden fejl, retunerer metoden objektet.
+     * @param choice
+     * @return choice
+     * @throws IllegalArgumentException
+     * @throws SQLException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public Choice createChoice(Choice choice) throws IllegalArgumentException, SQLException, IOException, ClassNotFoundException {
              Connection conn = DBWrapper.getConnection();
 
@@ -285,39 +303,13 @@ public class DBWrapper {
 
 
 
-    public static void deleteChoice(Choice choice) {
-        Connection conn = null;
-        PreparedStatement preparedStatement = null;
-        String PS = "DELETE FROM fmldb.choice WHERE fmldb.choice.id = " + choice.getChoiceId();
-        try {
-            conn = DBWrapper.getConnection();
-            conn.prepareStatement(PS);
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close(conn);
-            close(preparedStatement);
-        }
-    }
-/*  // VALIDERING KAN SKE I CONTROLLER, BRUG getChoices OG TJEK HVILKEN SOM HAR ANSWER = TRUE
-    public static Boolean validateChoice(Choice choice) {
-        Connection conn = null;
-        PreparedStatement preparedStatement = null;
-        String PS = "";
-        try {
-            conn = DBWrapper.getConnection(DEFAULT_URL,DEFAULT_USERNAME,DEFAULT_PASSWORD);
-            conn.prepareStatement(PS);
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close(conn);
-            close(preparedStatement);
-        }
-    }
-*/
 
+    /**
+     * Denne metode bruges når vi skal have en liste af vores User objektet.
+     * Metoden opretter et arrayList og fylder det med vores User objektet fra databasen.
+     * Til sidst retuneres det fulde arrayList.
+     * @return allUsers
+     */
     public static ArrayList<User> getUsers() {
         Connection conn = null;
         ResultSet rs = null;
@@ -345,6 +337,15 @@ public class DBWrapper {
         return null;
     }
 
+    /**
+     * Denne metode bruges når vi skal have en liste af vores Course objektet.
+     * Metoden opretter et arrayList og fylder det med vores Course objektet fra databasen.
+     * Til sidst retuneres det fulde arrayList.
+     * @return allCourses
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+
     public static ArrayList<Course> getCourses() throws IOException, ClassNotFoundException {
         Connection conn = null;
         ResultSet rs = null;
@@ -369,6 +370,17 @@ public class DBWrapper {
         }
         return null;
     }
+
+    /**
+     * Metoden her bruges til at få en liste af Quiz objekter, som relaterer til det specifikke fag (Course),
+     * i vores database. Metoden skal have en int, som bruges til at søge efter courseId. Faget med det respektive
+     * id, bliver derefter fundet og alle Quiz'es der relaterer til dette fag, puttes i et arrayList.
+     * Dette arrayList bliver så til sidst returneret.
+     * @param courseId
+     * @return allQuizzes or null
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
 
     public static ArrayList<Quiz> getQuizzes(int courseId) throws IOException, ClassNotFoundException {
         Connection conn = null;
@@ -395,6 +407,17 @@ public class DBWrapper {
         return null;
     }
 
+    /**
+     *  Metoden her bruges til at få en liste af Question objekter, som relaterer til den specifikke quiz,
+     * i vores database. Metoden skal have en int, som bruges til at søge efter quizId. Quiz'en med det respektive
+     * id, bliver derefter fundet og alle Question objekter der relaterer til denne Quiz, puttes i et arrayList.
+     * Dette arrayList bliver så til sidst returneret.
+     *
+     * @param quizId
+     * @return allQuestions or null
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
 
     public static ArrayList<Question> getQuestions(int quizId) throws IOException, ClassNotFoundException {
         Connection conn = null;
@@ -421,7 +444,15 @@ public class DBWrapper {
         return null;
     }
 
-
+    /** Metoden her bruges til at få en liste af Choice objekter, som relaterer til den specifikke Question,
+     * i vores database. Metoden skal have en int, som bruges til at søge efter questionId. Question objektet med det respektive
+     * id, bliver derefter fundet og alle Choice objekter der relaterer til dette question, puttes i et arrayList.
+     * Dette arrayList bliver så til sidst returneret.
+     *
+     * @param questionID
+     * @return allChoices or null
+     * @throws IOException
+     */
     public static ArrayList<Choice> getChoices(int questionID) throws IOException {
         Connection conn = null;
         ResultSet rs = null;
@@ -449,60 +480,13 @@ public class DBWrapper {
         return null;
     }
 
-    // Giver alle de fag som en bestemt bruger er tilmeldt
-    public static ArrayList<Course> getUsersCourses(User user) throws IOException, ClassNotFoundException {
-        Connection conn = null;
-        ResultSet rs = null;
-        String PS = "SELECT c.* FROM fmldb.user_course uc INNER JOIN fmldb.user u ON u.id = uc.user_id INNER JOIN fmldb.course c ON uc.course_id = c.id WHERE u.id =" + user.getUserId();
-        PreparedStatement preparedStatement = null;
-        ArrayList<Course> courseArrayList = new ArrayList<>();
-        try {
-            conn = DBWrapper.getConnection();
-            preparedStatement = conn.prepareStatement(PS);
-            rs = preparedStatement.executeQuery();
 
-            while (rs.next()) {
-                Course tempCourse = new Course(rs.getInt(1), rs.getString(2));
-                courseArrayList.add(tempCourse);
-            }
-            return courseArrayList;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            close(conn);
-            close(rs);
-            close(preparedStatement);
-        }
-        return null;
-    }
+    /**Disse metoder bruges til at lukke den respektive for de forskellige "forbindelser" som bliver åbnet i
+     * dbwrapperen. Vi har en metode til at lukke Connection, Statement og ResultSet.
+     * @param connection
+     */
 
 
-    // Giver alle brugere som er tilmeldt et bestemt fag s
-    public static ArrayList<User> getCoursesUsers(Course course) throws IOException, ClassNotFoundException {
-        Connection conn = null;
-        ResultSet rs = null;
-        String PS = "SELECT u.* FROM fmldb.user_course uc INNER JOIN fmldb.course c ON uc.course_id = c.id INNER JOIN fmldb.user u ON uc.user_id = u.id WHERE c.id =" + course.getCourseID();
-        PreparedStatement preparedStatement = null;
-        ArrayList<User> userArrayList = new ArrayList<>();
-        try {
-            conn = DBWrapper.getConnection();
-            preparedStatement = conn.prepareStatement(PS);
-            rs = preparedStatement.executeQuery();
-
-            while (rs.next()) {
-                User tempUser = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getLong(7));
-                userArrayList.add(tempUser);
-            }
-            return userArrayList;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            close(conn);
-            close(rs);
-            close(preparedStatement);
-        }
-        return null;
-    }
 
     public static void close(Connection connection) {
         try {
