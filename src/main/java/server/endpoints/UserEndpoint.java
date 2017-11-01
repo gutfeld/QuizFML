@@ -86,12 +86,13 @@ public class UserEndpoint {
 
         User u = controller.login(data);
         String output = new Gson().toJson(u);
-        String encryptedOutput = XORController.encryptDecryptXOR(output);
-        encryptedOutput = new Gson().toJson(encryptedOutput);
+
+        output = XORController.encryptDecryptXOR(output);
+
         if (u != null) {
             log.writeLog(this.getClass().getName(), this, "User logged in", 2);
 
-            return Response.status(200).type("application/json").entity(new Gson().toJson(encryptedOutput)).build();
+            return Response.status(200).type("application/json").entity(new Gson().toJson(output)).build();
         } else {
             log.writeLog(this.getClass().getName(), this, "User not logged in because of failure", 1);
             return Response.status(400).type("text/plain").entity("failure!").build();
