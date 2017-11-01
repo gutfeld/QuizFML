@@ -15,11 +15,12 @@ public class Globals implements ServletContextListener {
     public static Config config = new Config();
 
     /**
-     * This function can be used to initialize Logger and Config classes.
+     * Denne funktion kan blive brugt til at instantiere Logger og Config klasserne.
      *
-     * We do this in order for the rest of the program to use it afterwards.
+     * Vi gør dette for at resten af programmet kan bruge det efterfølgende.
      *
-     * This method is automatically called by JERSEY when the server is started
+     * Denne metode bliver automatisk kaldt af Jersey når serveren starter.
+     *
      */
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
