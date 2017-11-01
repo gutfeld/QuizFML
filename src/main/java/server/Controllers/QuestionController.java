@@ -17,7 +17,12 @@ public class QuestionController {
         this.gson = new Gson();
     }
 
-
+    /**
+     *
+     * @param quiz
+     * @return q
+     *  Metode til at hente alle questions fra db.
+     */
 
     public ArrayList <Question> getQuestions (int quiz) throws IOException, ClassNotFoundException {
         log.writeLog(this.getClass().getName(), this, "We are now getting questions", 2);
@@ -26,6 +31,13 @@ public class QuestionController {
 
 
     }
+
+    /**
+     *
+     * @param question
+     * @return isCreated
+     * Metode til at oprette question
+     */
 
     public Question createQuestion(Question question) throws Exception {
 
