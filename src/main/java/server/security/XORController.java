@@ -5,6 +5,7 @@ import server.utility.Globals;
 public class XORController {
 
 
+
         /**
          Kryptering skal kunne slås til og fra i configfilen
          Fremgansmåde:
@@ -16,7 +17,16 @@ public class XORController {
          Herefter unparses objektet fra JSON igen, således at vi kan bruge objektet i serveren.
          */
 
-        // Samzme metode skal laves på klienten for at dekryptere!!
+    /**
+     *
+     * @param willBeEncrypted
+     * @return willBeEncrypted
+     * Denne metode modtager en string der skal krypteres (willBeEncrypted) og tjekker om Globals.config.getEncryptions Boolean
+     * er slået til. Hvis den er, laves en StringBuilder med chars K, O, C og H. Derefter køres stringen igennem er for-loop der
+     * krypterer stringen. Derefter returneres det krypterede som string. Hvis Globals.config.getEncryption er deaktiveret,
+     * returneres stringen blot ukrypteret.
+     */
+    // Samzme metode skal laves på klienten for at dekryptere!!
         public static String encryptDecryptXOR(String willBeEncrypted) {
             //If: HER SKAL VI HAVE json.get("ENCRYPTION").getAsBoolean();
             if(Globals.config.getEncryption()) {
