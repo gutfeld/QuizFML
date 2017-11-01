@@ -8,6 +8,8 @@ import javax.servlet.ServletContextListener;
 import java.io.IOException;
 
 public class ServletContext implements ServletContextListener {
+
+    //instantiere config fil
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         try {
