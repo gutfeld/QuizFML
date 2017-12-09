@@ -12,7 +12,6 @@ public class DBWrapper {
 
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-
     private static Connection connection = null;
 
     /**
@@ -34,7 +33,6 @@ public class DBWrapper {
             }
 
             connection = DriverManager.getConnection("jdbc:mysql://" + Config.getDatabaseHost() + ":" + Config.getDatabasePort() + "/" + Config.getDatabaseName(), Config.getDatabaseUsername(), Config.getDatabasePassword());
-
 
         } catch (Exception e) {
             e.printStackTrace();
