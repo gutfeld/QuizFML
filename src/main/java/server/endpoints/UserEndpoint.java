@@ -6,10 +6,7 @@ import server.Controllers.UserController;
 import server.models.User;
 import server.security.XORController;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
@@ -24,6 +21,7 @@ public class UserEndpoint {
 
     /**
      * Metode der bruges til at hente alle users
+     *
      * @return Alle users
      */
 
@@ -43,6 +41,7 @@ public class UserEndpoint {
 
     /**
      * Metode der bruges til at hente User ud fra id
+     *
      * @param UserId
      * @return Den specifikke user
      */
@@ -55,16 +54,16 @@ public class UserEndpoint {
         log.writeLog(this.getClass().getName(), this, "We are now getting user by Id", 2);
 
 
-
         return Response
-            .status(200)
-            .type("application/json")
-            .entity(new Gson().toJson("foundUser"))
-            .build();
+                .status(200)
+                .type("application/json")
+                .entity(new Gson().toJson("foundUser"))
+                .build();
     }
 
     /**
      * Laver en ny User i databasen
+     *
      * @param user
      * @return True or False
      * @throws Exception
@@ -81,7 +80,7 @@ public class UserEndpoint {
         String encryptedOutput = XORController.encryptDecryptXOR(output);
         encryptedOutput = new Gson().toJson(encryptedOutput);
 
-        if(createUser != null) {
+        if (createUser != null) {
             return Response
                     .status(200)
                     .type("application/json")
@@ -95,6 +94,7 @@ public class UserEndpoint {
 
     /**
      * Tjekker om useren findes i systemet
+     *
      * @param data
      * @return True  or False
      * @throws Exception
@@ -123,4 +123,31 @@ public class UserEndpoint {
     }
 
 
+    @DELETE
+    @Path("{id}")
+    public Response deleteUser(@PathParam("id") int userId) throws Exception {
+
+        log.writeLog(this.getClass().getName(), this, "We are now in process of deleting a user", 2);
+
+        Boolean deleteQuiz = controller.deleteUser(userId);
+
+
+        if (deleteQuiz == true) {
+            log.writeLog(this.getClass().getName(), this, "User bliver slettet", 2);
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson("Den burde vÊre slettet korrekt"))
+                    .build();
+        } else {
+            log.writeLog(this.getClass().getName(), this, "User er ikke slettet korrekt", 2);
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson("Den er vidst ikke slettet korrekt"))
+                    .build();
+        }
+
+
+    }
 }

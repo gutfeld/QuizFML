@@ -140,6 +140,29 @@ public class DBWrapper {
 
     }
 
+    public static Boolean deleteUser(int userId) throws Exception {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String PS = "DELETE FROM fmldb.user WHERE fmldb.user.id = ?";
+        int check = 0;
+        try {
+            conn = DBWrapper.getConnection();
+            preparedStatement = conn.prepareStatement(PS);
+            preparedStatement.setInt(1, userId);
+            check = preparedStatement.executeUpdate();
+
+            if (check == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn);
+            close(preparedStatement);
+        }
+        return false;
+    }
+
     /**Denne metode opretter en ny quiz i vores database.
      * Den modtager et Quiz objekt når det bliver kaldt, og dette Quiz objekt bliver derefter
      * oprettet og gemt i vores database. Hvis quiz'en bliver oprettet uden fejl, retunerer metoden objektet.

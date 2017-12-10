@@ -74,6 +74,11 @@ public class UserController {
 
     }
 
+    public Boolean deleteUser (int userId) throws Exception {
+        log.writeLog(this.getClass().getName(), this, "We are deleting a user", 0);
+        return db.deleteUser(userId);
+    }
+
 
 
 }
