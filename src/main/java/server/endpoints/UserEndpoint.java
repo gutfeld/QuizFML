@@ -31,10 +31,11 @@ public class UserEndpoint {
         log.writeLog(this.getClass().getName(), this, "We are now getting users", 2);
 
         ArrayList<User> users = controller.getUsers();
+        String userz = new Gson().toJson(users);
 
         return Response.status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(users))
+                .entity(new Gson().toJson(userz))
                 .build();
 
     }
